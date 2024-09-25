@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
+import { Link } from "react-router-dom";
 
 interface Member {
   firstName: string;
@@ -156,7 +157,7 @@ function SignUpForm() {
         >
           Create an account
         </button>
-        <p className="linkToLogin text-left">Already have an account? Sign in</p>
+        <p className="linkToLogin text-left">Already have an account? <Link to={"/signin"} className="font-bold">Sign in</Link></p>
       </form>
     </div>
   )
