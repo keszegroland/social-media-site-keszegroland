@@ -3,65 +3,51 @@ import CustomInput from "./CustomInput";
 import { Link } from "react-router-dom";
 
 interface Member {
-  firstName: string;
-  lastName: string;
   username: string;
   password: string;
-  email: string;
 }
 
-async function createMember(newMember: Member) {
-  const res = await fetch('/api/member/signup', {
+async function signInWithMember(member: Member) {
+  const res = await fetch('/api/member/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(newMember),
+    body: JSON.stringify(member),
   });
   const data = await res.json();
   return data;
 }
 
-function SignUpForm() {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
+function SignInForm() {
   const [username, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  async function handleCreateMember(e: FormEvent<HTMLFormElement>) {
+  async function handleMemberSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const newMember: Member = { firstName, lastName, username, password, email };
-    await createMember(newMember);
+    const member: Member = { username, password };
+    interface JwtResponse {
+      jwt: string;
+      username: string;
+      roles: string[];
+    }
+    const data: JwtResponse = await signInWithMember(member);
+    console.log('Successful login', data);
   }
 
   function handleShowPassword() {
-    setShowPassword((prev) => !prev);
+    setShowPassword(prev => !prev);
   }
 
   return (
     <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl mx-auto border-opacity-5">
-      <form className="flex-col pt-[20px] p-[30px]" onSubmit={handleCreateMember}>
-        <h1 className="text-[45px] text-left font-bold">Sign up</h1>
-        <p className="text-[15px] text-left">Create your account in seconds</p>
-        <div className="flex gap-2 max-w-[326px]">
-          <CustomInput
-            label="First Name"
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <CustomInput
-            label="Last Name"
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
+      <form className="flex-col pt-[20px] p-[30px]" onClick={handleMemberSignIn}>
+        <h1 className="text-[45px] text-left font-bold">Sign in</h1>
+        <p className="text-[15px] text-left">Please enter your details to access your account.</p>
         <CustomInput
-          label="Username"
-          type="text"
+          label='Username'
+          type='text'
           value={username}
           onChange={(e) => setUserName(e.target.value)}
           icon={
@@ -88,29 +74,8 @@ function SignUpForm() {
           }
         />
         <CustomInput
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={
-            <svg
-              height="22px"
-              width="22px"
-              viewBox="0 0 32 32"
-            >
-              <path d="M0 16q0-3.232 1.28-6.208t3.392-5.12 5.12-3.392 6.208-1.28q3.264 0 6.24 1.28t5.088 3.392 3.392 5.12 1.28
-             6.208v6.016q0 2.496-1.76 4.224t-4.224 1.76q-2.272 0-3.936-1.472t-1.984-3.68q-1.952 1.152-4.096 1.152-2.176 0-4-1.056t-2.944-2.912-1.056-4.032q0-3.296
-            2.336-5.632t5.664-2.368 5.664 2.368 2.336 5.632v6.016q0 0.8 0.608 1.408t1.408 0.576q0.8 0 1.408-0.576t0.576-1.408v-6.016q0-3.264-1.6-6.016t-4.384-4.352-6.016-1.632-6.016
-            1.632-4.384 4.352-1.6 6.016 1.6 6.048 4.384 4.352 6.016 1.6h2.016q0.8 0 1.408 0.608t0.576 1.408-0.576 1.408-1.408 0.576h-2.016q-3.264
-            0-6.208-1.248t-5.12-3.424-3.392-5.12-1.28-6.208zM12 16q0 1.664 1.184 2.848t2.816 1.152 2.816-1.152 1.184-2.848-1.184-2.816-2.816-1.184-2.816 1.184-1.184 2.816z" fill="currentColor">
-              </path>
-            </svg>
-
-          }
-        />
-        <CustomInput
-          label="Password"
-          type={showPassword ? "text" : "password"}
+          label='Password'
+          type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           icon={
@@ -148,19 +113,29 @@ function SignUpForm() {
                 </g>
               </svg>
             </label>
-
           }
         />
         <button
-          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mb-3 mt-6 text-base-100 hover:bg-base-100 hover:text-neutral"
+          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-8 mb-5 text-base-100 hover:bg-base-100 hover:text-neutral"
           type="submit"
         >
-          Create an account
+          Continue
         </button>
-        <p className="linkToLogin text-left">Already have an account? <Link to={"/signin"} className="font-bold">Sign in</Link></p>
+        <div className="flex items-center">
+          <hr className="flex flex-1 border-neutral-400" />
+          <p className="mr-3 ml-3">OR</p>
+          <hr className="flex flex-1 border-neutral-400" />
+        </div>
+        <button
+          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-5 mb-3 text-base-100 hover:bg-base-100 hover:text-neutral"
+          type="submit"
+        >
+          Continue with Google
+        </button>
+        <p className="text-left">Don't have an account? <Link to={"/signup"} className="font-bold">Sign up</Link></p>
       </form>
     </div>
   )
 }
 
-export default SignUpForm;
+export default SignInForm;

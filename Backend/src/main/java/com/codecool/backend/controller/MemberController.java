@@ -22,7 +22,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public UUID signUp(@RequestBody NewMemberDTO member) {
         return memberService.createNewMember(member);
     }
