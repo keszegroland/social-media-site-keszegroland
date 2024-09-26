@@ -17,10 +17,3 @@ div {
   align-items: center;
   justify-content: center;
 }
-
-.no-select {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
