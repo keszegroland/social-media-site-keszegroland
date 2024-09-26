@@ -7,6 +7,12 @@ interface Member {
   password: string;
 }
 
+interface JwtResponse {
+  jwt: string;
+  username: string;
+  roles: Set<string>;
+}
+
 async function signInWithMember(member: Member) {
   const res = await fetch('/api/member/login', {
     method: 'POST',
@@ -27,13 +33,8 @@ function SignInForm() {
   async function handleMemberSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const member: Member = { username, password };
-    interface JwtResponse {
-      jwt: string;
-      username: string;
-      roles: string[];
-    }
     const data: JwtResponse = await signInWithMember(member);
-    console.log('Successful login', data);
+    localStorage.setItem('jwt', data.jwt);
   }
 
   function handleShowPassword() {
@@ -42,7 +43,7 @@ function SignInForm() {
 
   return (
     <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl mx-auto border-opacity-5">
-      <form className="flex-col pt-[20px] p-[30px]" onClick={handleMemberSignIn}>
+      <form className="flex-col pt-[20px] p-[30px]" onSubmit={handleMemberSignIn}>
         <h1 className="text-[45px] text-left font-bold">Sign in</h1>
         <p className="text-[15px] text-left">Please enter your details to access your account.</p>
         <CustomInput
