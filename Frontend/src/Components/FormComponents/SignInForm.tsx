@@ -42,8 +42,8 @@ function SignInForm() {
   }
 
   return (
-    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl mx-auto border-opacity-5">
-      <form className="flex-col pt-[20px] p-[30px]" onSubmit={handleMemberSignIn}>
+    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl border-opacity-5 min-w-[327px] m-4">
+      <form className="flex-col pt-5 p-6" onSubmit={handleMemberSignIn}>
         <h1 className="text-[45px] text-left font-bold">Sign in</h1>
         <p className="text-[15px] text-left">Please enter your details to access your account.</p>
         <CustomInput

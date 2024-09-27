@@ -43,11 +43,11 @@ function SignUpForm() {
   }
 
   return (
-    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl border-opacity-5 max-w-full min-w-[327px] m-4">
+    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl border-opacity-5 min-w-[327px] m-4">
       <form className="flex-col pt-5 p-6" onSubmit={handleCreateMember}>
         <h1 className="text-[45px] text-left font-bold">Sign up</h1>
         <p className="text-[15px] text-left">Create your account in seconds.</p>
-        <div className="flex gap-2 max-w-[326px]">
+        <div className="flex gap-2">
           <CustomInput
             label="First Name"
             type="text"
