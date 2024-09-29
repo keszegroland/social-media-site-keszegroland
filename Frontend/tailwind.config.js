@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        'custom-shadow': '35px 35px 35px rgba(0, 0, 0, 0.45)',
+        'custom-shadow': '15px 15px 25px rgba(0, 0, 0, 0.30)',
       },
       inputBox: {
         'custom-inputBox': 'relative, '

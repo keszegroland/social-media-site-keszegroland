@@ -43,11 +43,11 @@ function SignUpForm() {
   }
 
   return (
-    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl mx-auto border-opacity-5">
-      <form className="flex-col pt-[20px] p-[30px]" onSubmit={handleCreateMember}>
-        <h1 className="text-[45px] text-left font-bold">Sign up</h1>
-        <p className="text-[15px] text-left">Create your account in seconds.</p>
-        <div className="flex gap-2 max-w-[326px]">
+    <div className="sm:w-auto sm:h-auto bg-clip-padding backdrop-blur-lg bg-opacity-0 relative z-10 bg-base-300 p-2 sm:shadow-custom-shadow sm:border sm:border-solid sm:border-black sm:rounded-2xl border-opacity-20 sm:border-opacity-5 sm:min-w-[327px] sm:m-4 sm:bg-opacity-100 sm:backdrop-blur-none min-w-[300px]">
+      <form className="flex-col pt-5 p-6" onSubmit={handleCreateMember}>
+        <h1 className="text-[40px] sm:text-[45px] text-left font-bold">Sign up</h1>
+        <p className="text-[14px] sm:text-[15px] text-left">Create your account in seconds.</p>
+        <div className="flex gap-2 max-w-[340px]">
           <CustomInput
             label="First Name"
             type="text"
@@ -153,12 +153,12 @@ function SignUpForm() {
           }
         />
         <button
-          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mb-3 mt-6 text-base-100 hover:bg-base-100 hover:text-neutral"
+          className="btn bg-neutral btn-block border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-6 mb-3 text-base-100 hover:bg-base-100 hover:text-neutral sm:mt-8 sm:mb-3"
           type="submit"
         >
           Create an account
         </button>
-        <p className="text-left">Already have an account? <Link to={"/signin"} className="font-bold">Sign in</Link></p>
+        <p className="text-[14px] sm:text-[15px] text-left">Already have an account? <Link to={"/signin"} className="font-bold">Sign in</Link></p>
       </form>
     </div>
   )
