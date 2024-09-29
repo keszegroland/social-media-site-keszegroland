@@ -1,10 +1,12 @@
+import Background from "../Components/Background/Background";
 import SignInForm from "../Components/FormComponents/SignInForm";
 
 function SignIn() {
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-[440px]">
+    <div className="relative w-screen h-screen bg-base-300 sm:bg-base-100">
       <SignInForm />
+      <Background />
     </div>
   )
 }

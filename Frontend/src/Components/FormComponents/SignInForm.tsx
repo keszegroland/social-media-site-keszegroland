@@ -42,10 +42,10 @@ function SignInForm() {
   }
 
   return (
-    <div className="bg-base-300 p-2 shadow-custom-shadow border border-solid border-black rounded-2xl border-opacity-5 min-w-[327px] m-4">
+    <div className="w-full h-full sm:w-auto sm:h-auto bg-clip-padding backdrop-blur-lg bg-opacity-0 relative z-10 bg-base-300 p-2 sm:shadow-custom-shadow sm:border sm:border-solid sm:border-black sm:rounded-2xl border-opacity-20 sm:border-opacity-5 sm:min-w-[327px] sm:m-4 sm:bg-opacity-100 sm:backdrop-blur-none min-w-[300px]">
       <form className="flex-col pt-5 p-6" onSubmit={handleMemberSignIn}>
-        <h1 className="text-[45px] text-left font-bold">Sign in</h1>
-        <p className="text-[15px] text-left">Please enter your details to access your account.</p>
+        <h1 className="text-[40px] sm:text-[45px] text-left font-bold">Sign in</h1>
+        <p className="text-[14px] sm:text-[15px] text-left">Please enter your details to access your account.</p>
         <CustomInput
           label='Username'
           type='text'
@@ -117,23 +117,23 @@ function SignInForm() {
           }
         />
         <button
-          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-8 mb-5 text-base-100 hover:bg-base-100 hover:text-neutral"
+          className="btn bg-neutral btn-block border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-6 mb-3 sm:mt-8 sm:mb-5 text-base-100 hover:bg-base-100 hover:text-neutral"
           type="submit"
         >
           Continue
         </button>
         <div className="flex items-center">
           <hr className="flex flex-1 border-neutral-400" />
-          <p className="mr-3 ml-3">OR</p>
+          <p className="text-[14px] mr-3 ml-3">OR</p>
           <hr className="flex flex-1 border-neutral-400" />
         </div>
         <button
-          className="btn bg-neutral w-full border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-5 mb-3 text-base-100 hover:bg-base-100 hover:text-neutral"
+          className="btn bg-neutral btn-block border-0 outline-none rounded-2xl cursor-pointer font-bold text-base mt-3 mb-3 sm:mt-5 sm:mb-3 text-base-100 hover:bg-base-100 hover:text-neutral"
           type="submit"
         >
           Continue with Google
         </button>
-        <p className="text-left">Don't have an account? <Link to={"/signup"} className="font-bold">Sign up</Link></p>
+        <p className="text-[14px] sm:text-[15px] text-left">Don't have an account? <Link to={"/signup"} className="font-bold">Sign up</Link></p>
       </form>
     </div>
   )
