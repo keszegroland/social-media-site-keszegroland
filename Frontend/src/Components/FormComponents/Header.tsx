@@ -20,7 +20,7 @@ function Header() {
         </svg>
       </label>
     </div>
-  );
-};
+  )
+}
 
 export default Header;
