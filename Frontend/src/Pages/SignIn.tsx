@@ -7,9 +7,11 @@ function SignIn() {
   return (
     <div className="relative w-screen h-screen bg-base-300 sm:bg-base-100">
       <Header />
-      <SignInForm />
-      <Background />
-    </div>
+      <div className="relative w-screen max-h-[750px]">
+        <SignInForm />
+        <Background />
+      </div>
+    </div >
   )
 }
 
