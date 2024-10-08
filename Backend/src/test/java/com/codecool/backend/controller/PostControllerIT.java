@@ -87,9 +87,9 @@ public class PostControllerIT {
     @Test
     @WithMockUser(roles = "USER")
     void testGetAllPosts() throws Exception {
-        mockMvc.perform(get("/api/post/getAll"))
+        mockMvc.perform(get("/api/post/all"))
                 .andExpect(status().isOk());
-        UUID postId = postRepository.findAll().get(0).getPublicId();
+        UUID postId = postRepository.findAll().getFirst().getPublicId();
         List<Post> posts = postRepository.findAll();
         Post post = postRepository.findByPublicId(postId);
         assertEquals(post.getDescription(), "meow");

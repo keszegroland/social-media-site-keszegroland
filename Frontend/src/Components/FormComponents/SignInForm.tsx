@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 
 interface Member {
   username: string;
@@ -29,12 +29,14 @@ function SignInForm() {
   const [username, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate: NavigateFunction = useNavigate();
 
   async function handleMemberSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const member: Member = { username, password };
     const data: JwtResponse = await signInWithMember(member);
     localStorage.setItem('jwt', data.jwt);
+    navigate('/home');
   }
 
   function handleShowPassword() {
