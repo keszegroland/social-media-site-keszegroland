@@ -1,18 +1,19 @@
 import CustomMenuItem from "./CustomMenuItem";
+import LogoBadge from "./LogoBadge";
 import MemberBadge from "./MemberBadge";
 
 function SideNavbar() {
 
   return (
-    <div className="fixed bottom-0 w-full h-17 md:flex md:top-0 md:left-0 md:h-full md:flex-col md:w-72 bg-base-300 rounded-t-[16px] md:rounded-none md:rounded-r-[16px] md:gap-8">
-      <h1 className="hidden md:block font-bold text-[40px] md:mt-8 md:w-full md:text-left md:pl-3">Snapify</h1>
+    <div className="bg-base-300 fixed flex-none w-full bottom-0 md:rounded-r-2xl md:w-60 lg:w-64 xl:w-72 md:top-0 md:left-0 md:flex-col md:items-start md:justify-start md:px-6 md:py-10 md:gap-10 z-10 border-t border-solid">
+      <LogoBadge />
       <MemberBadge />
-      <ul className="menu menu-horizontal md:menu-lg gap-8 md:gap-3 md:menu-vertical md:w-10/12 md:p-0 md:h-full sm:gap-20">
+      <ul className="menu menu-horizontal flex flex-nowrap w-full justify-around md:menu-vertical md:menu-lg md:flex-1">
         <CustomMenuItem fileName="home" text="Home" route="/home" />
         <CustomMenuItem fileName="people" text="People" route="/people" />
         <CustomMenuItem fileName="save" text="Saved" route="/saved" />
         <CustomMenuItem fileName="createPost" text="Create Post" route="/post/create" />
-        <CustomMenuItem fileName="signOut" text="Sign Out" route="/signin" className="hidden md:block md:mt-auto md:mb-10" />
+        <CustomMenuItem fileName="signOut" text="Sign Out" route="/signin" className="hidden md:block md:mt-auto" />
       </ul>
     </div>
   )

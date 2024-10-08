@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SideNavbar from "../Components/Home/SideBar/SideNavbar";
 import OnePost from "../Components/Home/Post/OnePost";
+import HomeHeader from "../Components/Home/HomeHeader";
 
 interface Post {
   publicId: string;
@@ -28,16 +29,18 @@ function Home() {
   }, [])
 
 
-  return <div className="flex">
+  return <div className="w-full h-full flex">
     <SideNavbar />
-    <div className="flex flex-1 flex-col items-center justify-center overflow-scroll p-14 md:ml-72">
-      <div className="flex w-full max-w-[650px] flex-col items-center justify-center">
-        <h2 className="text-left w-full font-bold text-[30px] mb-5">Home page</h2>
-        <ul className="flex flex-col flex-1 gap-10 w-[650px]">
-          {posts.map((post: Post) => (
-            <OnePost key={post.publicId} post={post}></OnePost>
-          ))}
-        </ul>
+    <div className="grid grid-cols-1 gap-4 md:ml-60 lg:ml-64 xl:ml-72 h-full w-full">
+      <div className="h-full w-full md:p-8 mb-32">
+        <div className="w-auto flex flex-col md:gap-5 h-full">
+          <HomeHeader />
+          <ul className="flex flex-col">
+            {posts.map((post) => (
+              <OnePost key={post.publicId} post={post} />
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
