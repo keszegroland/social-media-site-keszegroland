@@ -32,7 +32,7 @@ function Home() {
   return <div className="w-full h-full flex">
     <SideNavbar />
     <div className="grid grid-cols-1 gap-4 md:ml-60 lg:ml-64 xl:ml-72 h-full w-full">
-      <div className="h-full w-full md:p-8 mb-32">
+      <div className="h-full w-full md:p-8 mb-32 md:mb-0">
         <div className="w-auto flex flex-col md:gap-5 h-full">
           <HomeHeader />
           <ul className="flex flex-col">
