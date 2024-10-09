@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getToken from "../../../Utils/GetToken";
+import getToken from "../../../Utils/getToken";
 
 interface MemberIdentity {
   username: string;
