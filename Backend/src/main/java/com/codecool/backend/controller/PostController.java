@@ -22,7 +22,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public List<PostDTO> getAllPosts() {
         return postService.getAllPosts();
     }

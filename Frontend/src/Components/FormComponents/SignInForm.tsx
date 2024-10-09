@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 
 interface Member {
   username: string;
@@ -29,12 +29,14 @@ function SignInForm() {
   const [username, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate: NavigateFunction = useNavigate();
 
   async function handleMemberSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const member: Member = { username, password };
     const data: JwtResponse = await signInWithMember(member);
     localStorage.setItem('jwt', data.jwt);
+    navigate('/home');
   }
 
   function handleShowPassword() {
@@ -44,7 +46,7 @@ function SignInForm() {
   return (
     <div className="w-full h-full sm:w-auto sm:h-auto bg-clip-padding backdrop-blur-lg bg-opacity-0 relative z-10 bg-base-300 p-2 sm:shadow-custom-shadow sm:border sm:border-solid sm:border-black sm:rounded-2xl border-opacity-20 sm:border-opacity-5 sm:min-w-[327px] sm:m-4 sm:bg-opacity-100 sm:backdrop-blur-none min-w-[300px]">
       <form className="flex-col pt-5 p-6" onSubmit={handleMemberSignIn}>
-        <h1 className="text-[40px] sm:text-[45px] text-left font-bold">Sign in</h1>
+        <h1 className="text-[38px] sm:text-[45px] text-left font-bold">Sign in</h1>
         <p className="text-[14px] sm:text-[15px] text-left">Please enter your details to access your account.</p>
         <CustomInput
           label='Username'
