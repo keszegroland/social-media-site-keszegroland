@@ -1,4 +1,4 @@
-type JWTTokenType = string | null;
+export type JWTTokenType = string | null;
 
 function getToken(): JWTTokenType {
   const token: JWTTokenType = localStorage.getItem('jwt');
