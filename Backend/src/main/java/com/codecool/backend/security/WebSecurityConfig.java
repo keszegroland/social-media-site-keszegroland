@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/admin/deleteMember/**").hasRole("ADMIN")
                                 .requestMatchers("/api/post/**").permitAll()
                                 .requestMatchers("/api/comment/**").hasRole("USER")
+                                .requestMatchers("/api/likes/**").hasRole("USER")
                 );
 
         http.authenticationProvider(authenticationProvider());
