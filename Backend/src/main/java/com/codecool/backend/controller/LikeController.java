@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +26,11 @@ public class LikeController {
     @DeleteMapping("/unlike/{postPublicId}")
     public UUID unlikePost(@PathVariable UUID postPublicId, Principal principal) {
         return likeService.unlikePost(postPublicId, principal.getName());
+    }
+
+    @GetMapping("/")
+    public Set<UUID> getLikesForLoggedInMember(Principal principal) {
+        return likeService.getLikesForLoggedInMember(principal.getName());
     }
 
 }

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class LikeService {
@@ -58,5 +60,14 @@ public class LikeService {
     private Member findMemberByUsername(String username) {
         return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Member not found with username: " + username));
+    }
+
+    @Transactional
+    public Set<UUID> getLikesForLoggedInMember(String username) {
+        Member member = findMemberByUsername(username);
+        return likeRepository.findByMemberPublicId(member.getPublicId())
+                .stream()
+                .map(like -> like.getPost().getPublicId())
+                .collect(Collectors.toSet());
     }
 }
