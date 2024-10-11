@@ -8,7 +8,10 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.UUID;
 
 @Entity
-@Table(name = "likes")
+@Table(name = "likes", uniqueConstraints = {
+        @UniqueConstraint(name="unique_post_member_like",
+                columnNames = {"postId", "memberId"})
+})
 @Getter
 @Setter
 public class Like {

@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class LikeService {
@@ -63,11 +61,19 @@ public class LikeService {
     }
 
     @Transactional
-    public Set<UUID> getLikesForLoggedInMember(String username) {
+    public String getTheUsernameOfTheFirstLikerForPost(UUID postPublicId) {
+        return likeRepository.findFirstByPostPublicId(postPublicId)
+                .map(like -> like.getMember().getUsername())
+                .orElse("No likes yet.");
+    }
+
+    @Transactional
+    public boolean isPostLikedByLoggedInMember(UUID postPublicId, String username) {
         Member member = findMemberByUsername(username);
-        return likeRepository.findByMemberPublicId(member.getPublicId())
-                .stream()
-                .map(like -> like.getPost().getPublicId())
-                .collect(Collectors.toSet());
+        return likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId()).isPresent();
+    }
+
+    public int getTotalNumberOfLikes(UUID postPublicId) {
+        return likeRepository.findByPostPublicId(postPublicId).size();
     }
 }
