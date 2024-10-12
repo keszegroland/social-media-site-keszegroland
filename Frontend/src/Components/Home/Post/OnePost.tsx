@@ -1,5 +1,5 @@
 import BodyPost from './BodyPost';
-import FooterPost from './FooterPost';
+import FooterPost from './Footer/FooterPost';
 import HeaderPost from './HeaderPost';
 
 interface Post {

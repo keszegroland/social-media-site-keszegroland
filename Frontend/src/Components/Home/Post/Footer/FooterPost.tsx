@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import getToken, { JWTTokenType } from "../../../Utils/getToken";
+import getToken, { JWTTokenType } from "../../../../Utils/getToken";
 import SaveButton from "./SaveButton";
+import LikeButton from "./LikeButton";
+import LikeText from "./LikeText";
+import CommentButton from "./CommentButton";
 
-interface Props {
+interface FooterPostProps {
   postPublicId: string;
 };
 
@@ -23,7 +26,7 @@ async function handleLikeRequest(method: MethodType, path: string, token: JWTTok
     }
   });
 
-  const data = await response.json();
+  const data: LikeData | string = await response.json();
 
   if (method === "GET") {
     return data as LikeData;
@@ -32,7 +35,7 @@ async function handleLikeRequest(method: MethodType, path: string, token: JWTTok
   return data as string;
 }
 
-function FooterPost({ postPublicId }: Props) {
+function FooterPost({ postPublicId }: FooterPostProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
   const [usernameOfTheFirstLiker, setUsernameOfTheFirstLiker] = useState<string>("");
@@ -67,35 +70,18 @@ function FooterPost({ postPublicId }: Props) {
     }
   }
 
-  function handleLikeText(): JSX.Element {
-    if (numberOfLikes === 0) {
-      return <></>;
-    }
-
-    return numberOfLikes === 1 ? (
-      <><strong>{numberOfLikes}</strong> like.</>
-    ) : (
-      <><strong>{usernameOfTheFirstLiker}</strong> and <strong>{numberOfLikes - 1}</strong> other(s) like this.</>
-    )
-  }
-
-
   return (
-    <div className="flex flex-col w-full">
+    <div className="fle flex-col x w-full">
       <div className="flex w-full justify-between">
         <div className="flex gap-2">
-          <label className="swap swap-rotate cursor-pointer">
-            <input type="checkbox" checked={isLiked} onChange={handleLikeAction} />
-            <img className="swap-on" src="/liked.svg" alt="liked"></img>
-            <img className="swap-off" src="/like.svg" alt="like"></img>
-          </label>
-          <img className="cursor-pointer" src="/comment.svg" alt="comment"></img>
+          <LikeButton isLiked={isLiked} handleLikeAction={handleLikeAction} />
+          <CommentButton />
         </div>
         <SaveButton />
       </div>
-      <p className="text-xs md:text-sm text-left w-full pl-1">{handleLikeText()}</p>
+      <LikeText numberOfLikes={numberOfLikes} usernameOfTheFirstLiker={usernameOfTheFirstLiker} />
     </div>
-  );
+  )
 
 }
 
