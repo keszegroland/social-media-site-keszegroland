@@ -1,12 +1,4 @@
-import { ChangeEvent } from "react";
-
-interface InputFieldProps {
-  label: string;
-  type: string;
-  value: string;
-  icon?: JSX.Element;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+import { InputFieldProps } from "../../Types";
 
 function CustomInput({ label, type, value, icon, onChange }: InputFieldProps) {
 

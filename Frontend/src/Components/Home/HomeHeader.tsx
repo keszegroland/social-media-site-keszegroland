@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 function HomeHeader() {
+
   return (
     <div className="w-full px-2 md:px-5 h-16">
       <h2 className="font-bold w-full text-left md:text-right md:text-3xl text-xl">Home Feed</h2>

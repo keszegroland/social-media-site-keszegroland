@@ -1,18 +1,8 @@
 import { formatDistanceToNowStrict } from "date-fns";
+import { PostProps } from "../../../Types";
 
-interface Post {
-  publicId: string;
-  username: string;
-  description: string;
-  picture: string;
-  creationDate: string;
-}
+function HeaderPost({ post }: PostProps) {
 
-interface Prop {
-  post: Post
-}
-
-function HeaderPost({ post }: Prop) {
   return (
     <div className="flex items-center justify-start gap-2 md:gap-3 w-full">
       <img src="/profile.svg" alt="Profile Picture" className="w-10 h-10 md:w-14 md:h-14"></img>

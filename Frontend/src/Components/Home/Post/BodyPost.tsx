@@ -1,16 +1,7 @@
-interface Post {
-  publicId: string;
-  username: string;
-  description: string;
-  picture: string;
-  creationDate: string;
-}
+import { PostProps } from "../../../Types";
 
-interface Prop {
-  post: Post
-}
+function BodyPost({ post }: PostProps) {
 
-function BodyPost({ post }: Prop) {
   return (
     <>
       <div className="flex flex-col w-full items-start justify-center">

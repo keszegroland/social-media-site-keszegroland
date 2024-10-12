@@ -1,19 +1,9 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { JwtResponse, MemberAuth } from "../../Types";
 
-interface Member {
-  username: string;
-  password: string;
-}
-
-interface JwtResponse {
-  jwt: string;
-  username: string;
-  roles: Set<string>;
-}
-
-async function signInWithMember(member: Member) {
+async function signInWithMember(member: MemberAuth) {
   const res = await fetch('/api/member/login', {
     method: 'POST',
     headers: {
@@ -33,7 +23,7 @@ function SignInForm() {
 
   async function handleMemberSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const member: Member = { username, password };
+    const member: MemberAuth = { username, password };
     const data: JwtResponse = await signInWithMember(member);
     localStorage.setItem('jwt', data.jwt);
     navigate('/home');

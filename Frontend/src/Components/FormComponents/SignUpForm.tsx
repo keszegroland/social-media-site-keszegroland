@@ -1,16 +1,9 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { NewMember } from "../../Types";
 
-interface Member {
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  email: string;
-}
-
-async function createMember(newMember: Member) {
+async function createMember(newMember: NewMember) {
   const res = await fetch('/api/member/signup', {
     method: 'POST',
     headers: {
@@ -33,7 +26,7 @@ function SignUpForm() {
 
   async function handleCreateMember(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const newMember: Member = { firstName, lastName, username, password, email };
+    const newMember: NewMember = { firstName, lastName, username, password, email };
     await createMember(newMember);
     navigate('/signin');
   }

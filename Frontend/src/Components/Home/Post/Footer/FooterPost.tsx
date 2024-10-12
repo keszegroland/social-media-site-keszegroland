@@ -1,21 +1,10 @@
 import { useEffect, useState } from "react";
-import getToken, { JWTTokenType } from "../../../../Utils/getToken";
+import getToken from "../../../../Utils/getToken";
 import SaveButton from "./SaveButton";
 import LikeButton from "./LikeButton";
 import LikeText from "./LikeText";
 import CommentButton from "./CommentButton";
-
-interface FooterPostProps {
-  postPublicId: string;
-};
-
-interface LikeData {
-  isPostLiked: boolean;
-  usernameOfTheFirstLiker: string;
-  numberOfLikes: number;
-};
-
-type MethodType = "GET" | "POST" | "DELETE";
+import { FooterPostProps, JWTTokenType, LikeData, MethodType } from "../../../../Types";
 
 async function handleLikeRequest(method: MethodType, path: string, token: JWTTokenType): Promise<LikeData | string> {
   const response = await fetch(`/api/likes/${path}`, {

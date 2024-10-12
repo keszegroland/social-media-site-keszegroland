@@ -1,8 +1,4 @@
-
-interface LikeTextProps {
-  numberOfLikes: number;
-  usernameOfTheFirstLiker: string;
-}
+import { LikeTextProps } from "../../../../Types";
 
 function LikeText({ numberOfLikes, usernameOfTheFirstLiker }: LikeTextProps) {
   if (numberOfLikes === 0) {

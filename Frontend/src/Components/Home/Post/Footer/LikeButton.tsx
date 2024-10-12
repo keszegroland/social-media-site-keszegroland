@@ -1,8 +1,4 @@
-
-interface LikeButtonProps {
-  isLiked: boolean;
-  handleLikeAction: () => void;
-}
+import { LikeButtonProps } from "../../../../Types";
 
 function LikeButton({ isLiked, handleLikeAction }: LikeButtonProps) {
 

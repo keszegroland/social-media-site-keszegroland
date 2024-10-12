@@ -1,13 +1,7 @@
 import { Location, useLocation } from "react-router-dom";
+import { CustomMenuItemProps } from "../../../Types";
 
-interface CustomMenuItemProp {
-  fileName: string;
-  text: string;
-  route: string;
-  className?: string;
-}
-
-function CustomMenuItem({ fileName, text, route, className }: CustomMenuItemProp) {
+function CustomMenuItem({ fileName, text, route, className }: CustomMenuItemProps) {
   const url: Location = useLocation();
   const isActive: boolean = url.pathname === route;
 
