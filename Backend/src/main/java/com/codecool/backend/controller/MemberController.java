@@ -1,15 +1,15 @@
 package com.codecool.backend.controller;
 
+import com.codecool.backend.controller.dto.MemberIdentityDTO;
 import com.codecool.backend.controller.dto.MemberLoginDTO;
 import com.codecool.backend.controller.dto.NewMemberDTO;
 import com.codecool.backend.model.payload.JwtResponse;
 import com.codecool.backend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -30,5 +30,11 @@ public class MemberController {
     @PostMapping("/login")
     public JwtResponse loginMember(@RequestBody MemberLoginDTO member) {
         return memberService.loginMember(member);
+    }
+
+    @GetMapping("/identity")
+    @PreAuthorize("isAuthenticated()")
+    public MemberIdentityDTO getMemberIdentity(Principal principal) {
+        return memberService.getMemberIdentity(principal.getName());
     }
 }

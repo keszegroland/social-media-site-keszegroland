@@ -1,8 +1,10 @@
 package com.codecool.backend.service;
 
+import com.codecool.backend.controller.dto.MemberIdentityDTO;
 import com.codecool.backend.controller.dto.MemberLoginDTO;
 import com.codecool.backend.controller.dto.NewMemberDTO;
 import com.codecool.backend.exception.MemberIsAlreadyExistsException;
+import com.codecool.backend.exception.MemberIsNotFoundException;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.MemberRole;
 import com.codecool.backend.model.Role;
@@ -79,5 +81,15 @@ public class MemberService {
         User userDetails = (User) authentication.getPrincipal();
         Set<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         return new JwtResponse(jwt, userDetails.getUsername(), roles);
+    }
+
+    public MemberIdentityDTO getMemberIdentity(String username) {
+        return memberRepository.findByUsername(username)
+                .map(member -> new MemberIdentityDTO(
+                        member.getFirstName(),
+                        member.getLastName(),
+                        member.getUsername()
+                ))
+                .orElseThrow(() -> new MemberIsNotFoundException("User not found"));
     }
 }
