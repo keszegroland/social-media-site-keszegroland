@@ -1,4 +1,6 @@
 package com.codecool.backend.controller.dto;
 
-public record MemberIdentityDTO(String firstName, String lastName, String username) {
+import java.util.UUID;
+
+public record MemberIdentityDTO(UUID publicId, String firstName, String lastName, String username) {
 }

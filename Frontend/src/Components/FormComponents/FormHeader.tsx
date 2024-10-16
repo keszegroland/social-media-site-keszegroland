@@ -1,4 +1,5 @@
-function Header() {
+function FormHeader() {
+
   return (
     <div className="navbar px-4 sm:px-0 flex-none w-full sm:top-1 sm:w-4/5 items-center justify-between min-w-[300px] bg-base-100 border-b border-solid sm:border-none">
       <div className="flex-none gap-1">
@@ -14,4 +15,4 @@ function Header() {
   )
 }
 
-export default Header;
+export default FormHeader;

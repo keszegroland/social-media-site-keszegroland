@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -36,5 +37,10 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public MemberIdentityDTO getMemberIdentity(Principal principal) {
         return memberService.getMemberIdentity(principal.getName());
+    }
+
+    @GetMapping("/all")
+    public Set<MemberIdentityDTO> getAllMembers() {
+        return memberService.getAllMembers();
     }
 }

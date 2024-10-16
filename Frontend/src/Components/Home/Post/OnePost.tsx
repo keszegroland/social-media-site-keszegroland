@@ -1,5 +1,5 @@
 import BodyPost from './BodyPost';
-import FooterPost from './FooterPost';
+import FooterPost from './Footer/FooterPost';
 import HeaderPost from './HeaderPost';
 
 interface Post {
@@ -20,7 +20,7 @@ function OnePost({ post }: Prop) {
     <div className="flex flex-col px-2 py-5 sm:p-4 sm:rounded-2xl md:p-5 bg-base-300 w-full border-solid border-y gap-5">
       <HeaderPost post={post} />
       <BodyPost post={post} />
-      <FooterPost />
+      <FooterPost postPublicId={post.publicId} />
     </div>
   )
 }

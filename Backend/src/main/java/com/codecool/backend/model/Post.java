@@ -7,6 +7,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -32,4 +33,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Report> reports;
     private int numOfReport;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Like> likes;
 }

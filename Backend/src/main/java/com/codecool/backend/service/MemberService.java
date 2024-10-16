@@ -85,11 +85,22 @@ public class MemberService {
 
     public MemberIdentityDTO getMemberIdentity(String username) {
         return memberRepository.findByUsername(username)
-                .map(member -> new MemberIdentityDTO(
-                        member.getFirstName(),
-                        member.getLastName(),
-                        member.getUsername()
-                ))
+                .map(this::convertMemberToMemberIdentityDTO)
                 .orElseThrow(() -> new MemberIsNotFoundException("User not found"));
+    }
+
+    public Set<MemberIdentityDTO> getAllMembers() {
+        return memberRepository.findAll().stream()
+                .map(this::convertMemberToMemberIdentityDTO)
+                .collect(Collectors.toSet());
+    }
+
+    private MemberIdentityDTO convertMemberToMemberIdentityDTO(Member member) {
+        return new MemberIdentityDTO(
+                member.getPublicId(),
+                member.getFirstName(),
+                member.getLastName(),
+                member.getUsername()
+        );
     }
 }
