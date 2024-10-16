@@ -1,5 +1,6 @@
 package com.codecool.backend.service;
 
+import com.codecool.backend.controller.dto.LikeDTO;
 import com.codecool.backend.model.Like;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
@@ -60,20 +61,27 @@ public class LikeService {
                 .orElseThrow(() -> new RuntimeException("Member not found with username: " + username));
     }
 
-    @Transactional
-    public String getTheUsernameOfTheFirstLikerForPost(UUID postPublicId) {
+    private boolean isPostLikedByLoggedInMember(UUID postPublicId, String username) {
+        Member member = findMemberByUsername(username);
+        return likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId()).isPresent();
+    }
+
+    private String getTheUsernameOfTheFirstLikerForPost(UUID postPublicId) {
         return likeRepository.findFirstByPostPublicId(postPublicId)
                 .map(like -> like.getMember().getUsername())
                 .orElse("No likes yet.");
     }
 
-    @Transactional
-    public boolean isPostLikedByLoggedInMember(UUID postPublicId, String username) {
-        Member member = findMemberByUsername(username);
-        return likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId()).isPresent();
+    private int getTotalNumberOfLikes(UUID postPublicId) {
+        return likeRepository.findByPostPublicId(postPublicId).size();
     }
 
-    public int getTotalNumberOfLikes(UUID postPublicId) {
-        return likeRepository.findByPostPublicId(postPublicId).size();
+    @Transactional
+    public LikeDTO getLikesDataForPost(UUID postPublicId, String username) {
+        return new LikeDTO(
+                isPostLikedByLoggedInMember(postPublicId, username),
+                getTheUsernameOfTheFirstLikerForPost(postPublicId),
+                getTotalNumberOfLikes(postPublicId)
+        );
     }
 }

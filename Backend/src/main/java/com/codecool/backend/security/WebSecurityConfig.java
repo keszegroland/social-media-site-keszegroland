@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/member/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/admin/deleteMember/**").hasRole("ADMIN")
-                                .requestMatchers("/api/post/**").permitAll()
+                                .requestMatchers("/api/post/**").hasRole("USER")
                                 .requestMatchers("/api/comment/**").hasRole("USER")
                                 .requestMatchers("/api/likes/**").hasRole("USER")
                 );

@@ -6,7 +6,18 @@ import LikeText from "./LikeText";
 import CommentButton from "./CommentButton";
 import { FooterPostProps, JWTTokenType, LikeData, MethodType } from "../../../../Types";
 
-async function handleLikeRequest(method: MethodType, path: string, token: JWTTokenType): Promise<LikeData | string> {
+async function fetchLikeDataForPost(path: string, token: JWTTokenType): Promise<LikeData> {
+  const response = await fetch(`/api/likes/${path}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  const data: LikeData = await response.json();
+  return data;
+}
+
+async function handleLikeToggle(method: MethodType, path: string, token: JWTTokenType): Promise<string> {
   const response = await fetch(`/api/likes/${path}`, {
     method: method,
     headers: {
@@ -15,13 +26,8 @@ async function handleLikeRequest(method: MethodType, path: string, token: JWTTok
     }
   });
 
-  const data: LikeData | string = await response.json();
-
-  if (method === "GET") {
-    return data as LikeData;
-  }
-
-  return data as string;
+  const data: string = await response.json();
+  return data;
 }
 
 function FooterPost({ postPublicId }: FooterPostProps) {
@@ -32,26 +38,24 @@ function FooterPost({ postPublicId }: FooterPostProps) {
 
   useEffect(() => {
     async function getLikeDataForPost() {
-      const response = await handleLikeRequest("GET", `data/${postPublicId}`, token);
-      if (typeof response === "object" && "isPostLiked" in response && "usernameOfTheFirstLiker" in response && "numberOfLikes" in response) {
-        const { isPostLiked, usernameOfTheFirstLiker, numberOfLikes } = response;
-        setIsLiked(isPostLiked);
-        setNumberOfLikes(numberOfLikes);
-        setUsernameOfTheFirstLiker(usernameOfTheFirstLiker);
-      }
+      const response = await fetchLikeDataForPost(`data/${postPublicId}`, token);
+      const { isPostLiked, usernameOfTheFirstLiker, numberOfLikes } = response;
+      setIsLiked(isPostLiked);
+      setNumberOfLikes(numberOfLikes);
+      setUsernameOfTheFirstLiker(usernameOfTheFirstLiker);
     }
     getLikeDataForPost();
   }, [postPublicId, token])
 
   async function handleLikeAction() {
-    const updatedIsLiked = !isLiked;
-    const updatedNumberOfLikes = updatedIsLiked ? (numberOfLikes + 1) : (numberOfLikes - 1);
-    setIsLiked(updatedIsLiked);
-    setNumberOfLikes(updatedNumberOfLikes);
+    const oppositeOfIsLiked = !isLiked;
+    const oppositeOfNumberOfLikes = oppositeOfIsLiked ? (numberOfLikes + 1) : (numberOfLikes - 1);
+    setIsLiked(oppositeOfIsLiked);
+    setNumberOfLikes(oppositeOfNumberOfLikes);
 
     try {
-      const method = updatedIsLiked ? "POST" : "DELETE";
-      await handleLikeRequest(method, `${updatedIsLiked ? "like" : "unlike"}/${postPublicId}`, token);
+      const method = oppositeOfIsLiked ? "POST" : "DELETE";
+      await handleLikeToggle(method, `${oppositeOfIsLiked ? "like" : "unlike"}/${postPublicId}`, token);
     } catch (error) {
       console.error(error);
       setIsLiked(isLiked);

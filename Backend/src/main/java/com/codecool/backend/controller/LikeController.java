@@ -28,24 +28,8 @@ public class LikeController {
         return likeService.unlikePost(postPublicId, principal.getName());
     }
 
-    private boolean isPostLikedByMember(UUID postPublicId, String username) {
-        return likeService.isPostLikedByLoggedInMember(postPublicId, username);
-    }
-
-    private String getFirstLikerUsername(UUID postPublicId) {
-        return likeService.getTheUsernameOfTheFirstLikerForPost(postPublicId);
-    }
-
-    private int getTotalLikesCount(UUID postPublicId) {
-        return likeService.getTotalNumberOfLikes(postPublicId);
-    }
-
     @GetMapping("/data/{postPublicId}")
     public LikeDTO getLikesDataForPost(@PathVariable UUID postPublicId, Principal principal) {
-        return new LikeDTO(
-                isPostLikedByMember(postPublicId, principal.getName()),
-                getFirstLikerUsername(postPublicId),
-                getTotalLikesCount(postPublicId)
-        );
+        return likeService.getLikesDataForPost(postPublicId, principal.getName());
     }
 }

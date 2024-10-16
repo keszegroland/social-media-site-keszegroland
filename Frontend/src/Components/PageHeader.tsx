@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { HomeHeaderProps } from "../../Types";
+import { HomeHeaderProps } from "../Types";
 
-function HomeHeader({ headerName }: HomeHeaderProps) {
+function PageHeader({ headerName }: HomeHeaderProps) {
 
   return (
     <div className="w-full px-2 md:px-5 h-16 z-0">
@@ -11,4 +11,4 @@ function HomeHeader({ headerName }: HomeHeaderProps) {
   )
 }
 
-export default HomeHeader;
+export default PageHeader;
