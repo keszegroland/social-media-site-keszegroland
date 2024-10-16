@@ -22,14 +22,16 @@ function Home() {
 
 
   return (
-    <div className="h-full w-full md:p-8 mb-32 md:mb-0">
-      <div className="w-auto flex flex-col md:gap-5 h-full">
-        <HomeHeader />
-        <ul className="flex flex-col">
-          {posts.map((post) => (
-            <OnePost key={post.publicId} post={post} />
-          ))}
-        </ul>
+    <div className="grid grid-cols-1 gap-4 w-full h-full">  
+      <div className="h-full w-full md:p-8 mb-32 md:mb-0">
+        <div className="w-auto flex flex-col md:gap-5 h-full">
+          <HomeHeader headerName="Home Feed" />
+          <ul className="flex flex-col">
+            {posts.map((post) => (
+              <OnePost key={post.publicId} post={post} />
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   )

@@ -11,6 +11,10 @@ export interface MemberIdentity {
   lastName: string;
 }
 
+export interface OneMemberProps {
+  member: MemberIdentity;
+}
+
 export interface FooterPostProps {
   postPublicId: string;
 };
@@ -75,4 +79,8 @@ export interface CustomMenuItemProps {
   text: string;
   route: string;
   className?: string;
+}
+
+export interface HomeHeaderProps {
+  headerName: string;
 }
