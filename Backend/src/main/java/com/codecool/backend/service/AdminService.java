@@ -35,7 +35,7 @@ public class AdminService {
     @Transactional
     public List<PostDTO> getReportedPosts() {
         List<Post> reportedPosts = postRepository.findByNumOfReportGreaterThan(0);
-        return reportedPosts.stream().map(post -> new PostDTO(post.getPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate())).toList();
+        return reportedPosts.stream().map(post -> new PostDTO(post.getPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor())).toList();
     }
 
     private String convertImageToBase64(byte[] picture) {

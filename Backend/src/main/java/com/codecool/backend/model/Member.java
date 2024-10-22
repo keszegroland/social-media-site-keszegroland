@@ -24,6 +24,7 @@ public class Member {
     private String username;
     private String password;
     private String email;
+    private String imageColor;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "memberRoles",
