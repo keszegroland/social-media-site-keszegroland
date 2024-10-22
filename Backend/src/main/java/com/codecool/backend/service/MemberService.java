@@ -21,9 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -72,6 +70,7 @@ public class MemberService {
         member.setUsername(memberDTO.username());
         member.setPassword(passwordEncoder.encode(memberDTO.password()));
         member.setEmail(memberDTO.email());
+        member.setImageColor(MemberImageColor.getRandomHexColor());
         return member;
     }
 
@@ -84,23 +83,14 @@ public class MemberService {
     }
 
     public MemberIdentityDTO getMemberIdentity(String username) {
-        return memberRepository.findByUsername(username)
-                .map(this::convertMemberToMemberIdentityDTO)
-                .orElseThrow(() -> new MemberIsNotFoundException("User not found"));
+        return memberRepository.findByUsername(username).map(this::convertMemberToMemberIdentityDTO).orElseThrow(() -> new MemberIsNotFoundException("User not found"));
     }
 
     public Set<MemberIdentityDTO> getAllMembers() {
-        return memberRepository.findAll().stream()
-                .map(this::convertMemberToMemberIdentityDTO)
-                .collect(Collectors.toSet());
+        return memberRepository.findAll().stream().map(this::convertMemberToMemberIdentityDTO).collect(Collectors.toSet());
     }
 
     private MemberIdentityDTO convertMemberToMemberIdentityDTO(Member member) {
-        return new MemberIdentityDTO(
-                member.getPublicId(),
-                member.getFirstName(),
-                member.getLastName(),
-                member.getUsername()
-        );
+        return new MemberIdentityDTO(member.getPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getImageColor());
     }
 }
