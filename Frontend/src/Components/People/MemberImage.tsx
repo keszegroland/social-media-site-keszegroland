@@ -9,8 +9,8 @@ function MemberImage({ firstName, lastName, imageColor }: MemberImageProps) {
   return (
     <div
       style={{ backgroundColor: imageColor }}
-      className="w-14 h-14 rounded-full">
-      <p className="font-semibold text-3xl">{getInitials()}</p>
+      className="w-12 h-12 md:w-14 md:h-14 rounded-full">
+      <p className="font-semibold text-xl md:text-2xl text-neutral">{getInitials()}</p>
     </div>
   )
 }

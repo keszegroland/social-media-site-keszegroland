@@ -75,6 +75,9 @@ export interface Post {
   description: string;
   picture: string;
   creationDate: string;
+  memberFirstName: string;
+  memberLastName: string;
+  memberImageColor: string;
 }
 
 export interface PostProps {
