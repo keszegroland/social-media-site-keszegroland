@@ -9,10 +9,17 @@ export interface MemberIdentity {
   username: string;
   firstName: string;
   lastName: string;
+  imageColor: string;
 }
 
 export interface OneMemberProps {
   member: MemberIdentity;
+}
+
+export interface MemberImageProps {
+  firstName: string;
+  lastName: string;
+  imageColor: string;
 }
 
 export interface FooterPostProps {

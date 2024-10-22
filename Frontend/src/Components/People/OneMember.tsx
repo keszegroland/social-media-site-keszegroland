@@ -1,10 +1,11 @@
 import { OneMemberProps } from "../../Types";
+import MemberImage from "./MemberImage";
 
 function OneMember({ member }: OneMemberProps) {
 
   return (
     <li className="bg-base-300 px-5 py-6 border-neutral border rounded-2xl flex flex-col items-center gap-5 justify-center min-w-44">
-      <img className="h-14 w-14" src="/profile.svg" alt="profile picture"></img>
+      <MemberImage firstName={member.firstName} lastName={member.lastName} imageColor={member.imageColor} />
       <div className="flex flex-col">
         <p className="font-bold leading-3 text-base md:text-lg md:leading-none">{member.firstName} {member.lastName}</p>
         <p className="text-xs md:text-sm md:leading-3">@{member.username}</p>
