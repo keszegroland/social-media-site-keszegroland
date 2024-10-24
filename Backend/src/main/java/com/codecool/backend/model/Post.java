@@ -35,4 +35,6 @@ public class Post {
     private int numOfReport;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Like> likes;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Save> saves;
 }
