@@ -3,7 +3,7 @@ import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { NewMember } from "../../Types";
 
-async function createMember(newMember: NewMember) {
+async function createMember(newMember: NewMember): Promise<string> {
   const res = await fetch('/api/member/signup', {
     method: 'POST',
     headers: {
@@ -11,7 +11,7 @@ async function createMember(newMember: NewMember) {
     },
     body: JSON.stringify(newMember),
   });
-  const data = await res.json();
+  const data: string = await res.json();
   return data;
 }
 

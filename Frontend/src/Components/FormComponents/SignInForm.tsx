@@ -3,7 +3,7 @@ import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { JwtResponse, MemberAuth } from "../../Types";
 
-async function signInWithMember(member: MemberAuth) {
+async function signInWithMember(member: MemberAuth): Promise<JwtResponse> {
   const res = await fetch('/api/member/login', {
     method: 'POST',
     headers: {
@@ -11,7 +11,7 @@ async function signInWithMember(member: MemberAuth) {
     },
     body: JSON.stringify(member),
   });
-  const data = await res.json();
+  const data: JwtResponse = await res.json();
   return data;
 }
 
