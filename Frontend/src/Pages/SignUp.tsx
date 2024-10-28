@@ -1,4 +1,5 @@
 import Background from "../Components/Background/Background";
+import AuthPageFooter from "../Components/FormComponents/AuthPageFooter";
 import FormHeader from "../Components/FormComponents/FormHeader";
 import SignUpForm from "../Components/FormComponents/SignUpForm";
 
@@ -9,7 +10,10 @@ function SignUp() {
       <FormHeader />
       <div className="relative flex-1 w-full">
         <div className="relative w-screen max-h-[750px]">
-          <SignUpForm />
+          <div className="flex flex-col">
+            <SignUpForm />
+            <AuthPageFooter />
+          </div>
           <Background />
         </div>
       </div>
