@@ -18,7 +18,7 @@ public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long likeId;
 
     @UuidGenerator
     private UUID likePublicId;
