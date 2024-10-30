@@ -17,13 +17,18 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
+
     @UuidGenerator
     private UUID commentPublicId;
+
     private String comment;
+
     private LocalDateTime creationDate = LocalDateTime.now();
+
     @ManyToOne
     @JoinColumn(name = "postId")
     private Post post;
+
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
