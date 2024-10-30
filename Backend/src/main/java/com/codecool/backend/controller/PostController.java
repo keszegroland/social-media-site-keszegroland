@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,13 +34,13 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public UUID createPost(@RequestBody NewPostDTO postDTO) {
-        return postService.createNewPost(postDTO);
+    public UUID createPost(@RequestBody NewPostDTO postDTO, Principal principal) {
+        return postService.createNewPost(postDTO, principal.getName());
     }
 
     @PatchMapping("/report")
-    public ResponseEntity<Void> reportPost(@RequestBody ReportDTO reportDto) {
-        postService.reportPost(reportDto);
+    public ResponseEntity<Void> reportPost(@RequestBody ReportDTO reportDTO, Principal principal) {
+        postService.reportPost(reportDTO, principal.getName());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

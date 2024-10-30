@@ -4,18 +4,13 @@ import com.codecool.backend.controller.dto.NewPostDTO;
 import com.codecool.backend.controller.dto.PostDTO;
 import com.codecool.backend.controller.dto.ReportDTO;
 import com.codecool.backend.exception.MemberIsAlreadyReportedException;
-import com.codecool.backend.exception.MemberIsNotFoundException;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Report;
-import com.codecool.backend.repository.MemberRepository;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.repository.ReportRepository;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -25,15 +20,14 @@ import java.util.UUID;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
     private final ReportRepository reportRepository;
-    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
+    private final MemberService memberService;
 
     @Autowired
-    public PostService(PostRepository postRepository, MemberRepository memberRepository, ReportRepository reportRepository) {
+    public PostService(PostRepository postRepository, ReportRepository reportRepository, MemberService memberService) {
         this.postRepository = postRepository;
-        this.memberRepository = memberRepository;
         this.reportRepository = reportRepository;
+        this.memberService = memberService;
     }
 
     public List<PostDTO> getAllPosts() {
@@ -42,43 +36,36 @@ public class PostService {
     }
 
     public List<PostDTO> getPostsByMemberPublicId(UUID memberPublicId) {
-        List<Post> postsByMemberId = postRepository.findAllByMemberPublicId(memberPublicId);
+        List<Post> postsByMemberId = postRepository.findAllByMemberMemberPublicId(memberPublicId);
         return postsByMemberId.stream().map(this::convertPostToDTO).toList();
     }
 
     @Transactional
-    public UUID createNewPost(NewPostDTO newPostDTO) {
+    public UUID createNewPost(NewPostDTO newPostDTO, String username) {
         try {
             Post post = new Post();
-            Member member = findLoginMember();
+            Member member = memberService.getMemberByUsername(username);
             post.setMember(member);
             post.setDescription(newPostDTO.description());
             post.setPicture(convertBase64Image(newPostDTO));
             postRepository.save(post);
-            return post.getPublicId();
+            return post.getPostPublicId();
         } catch (RuntimeException e) {
-            logger.error("Error creating a new post: {} ", e.getMessage());
             throw new RuntimeException("Error creating a new post. " + e.getMessage());
         }
     }
 
-    private Member findLoginMember() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new MemberIsNotFoundException("Member could not be found in the database."));
-    }
-
     @Transactional
-    public void reportPost(ReportDTO reportDto) {
-        Post post = postRepository.findByPublicId(reportDto.postPublicId());
-        Member member = findLoginMember();
-        if (reportRepository.findReportByMemberAndPostId(member, post.getId()).isPresent()) {
+    public void reportPost(ReportDTO reportDtO, String username) {
+        Post post = postRepository.findByPostPublicId(reportDtO.postPublicId());
+        Member member = memberService.getMemberByUsername(username);
+        if (reportRepository.findReportByMemberAndPostPostId(member, post.getPostId()).isPresent()) {
             throw new MemberIsAlreadyReportedException("Member already have a report in this post.");
         }
         Report report = new Report();
         report.setMember(member);
         report.setPost(post);
-        report.setReasonOfReport(reportDto.reason());
+        report.setReasonOfReport(reportDtO.reason());
         reportRepository.save(report);
         post.setNumOfReport(post.getReports().size());
         postRepository.save(post);
@@ -100,11 +87,21 @@ public class PostService {
         return base64Image;
     }
 
-    private Member getMemberByPublicId(UUID memberPublicId) {
-        return memberRepository.findByPublicId(memberPublicId).orElseThrow(()-> new MemberIsNotFoundException("Member could not be found in the database."));
+    protected Post getPostByPublicId(UUID postPublicId) {
+        return postRepository.findByPostPublicId(postPublicId);
     }
 
-    private PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(post.getPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+    protected PostDTO convertPostToDTO(Post post) {
+        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+    }
+
+    protected List<PostDTO> getAllReportedPosts() {
+        List<Post> reportedPosts = postRepository.findByNumOfReportGreaterThan(0);
+        return reportedPosts.stream().map(this::convertPostToDTO).toList();
+    }
+
+    protected UUID deletePostByPublicId(UUID postPublicId) {
+        postRepository.deleteByPostPublicId(postPublicId);
+        return postPublicId;
     }
 }

@@ -9,11 +9,12 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Post findByPublicId(UUID publicId);
 
-    List<Post> findAllByMemberPublicId(UUID memberPublicId);
+    Post findByPostPublicId(UUID postPublicId);
+
+    List<Post> findAllByMemberMemberPublicId(UUID memberPublicId);
 
     List<Post> findByNumOfReportGreaterThan(int numOfReports);
 
-    void deleteByPublicId(UUID publicId);
+    void deleteByPostPublicId(UUID postPublicId);
 }
