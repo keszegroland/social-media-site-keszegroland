@@ -11,11 +11,14 @@ import lombok.Setter;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long reportId;
+
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
+
     private String reasonOfReport;
+
     @ManyToOne
     @JoinColumn(name = "postId")
     private Post post;
