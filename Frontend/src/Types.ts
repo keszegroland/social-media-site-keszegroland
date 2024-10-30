@@ -5,7 +5,7 @@ export type MethodType = "GET" | "POST" | "DELETE";
 export type JWTTokenType = string | null;
 
 export interface MemberIdentity {
-  publicId: string;
+  memberPublicId: string;
   username: string;
   firstName: string;
   lastName: string;
@@ -70,7 +70,7 @@ export interface LikeTextProps {
 }
 
 export interface Post {
-  publicId: string;
+  postPublicId: string;
   username: string;
   description: string;
   picture: string;
