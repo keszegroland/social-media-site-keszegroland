@@ -17,13 +17,20 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
+
     @UuidGenerator
-    private UUID publicId;
+    private UUID memberPublicId;
+
     private String firstName;
+
     private String lastName;
+
     private String username;
+
     private String password;
+
     private String email;
+
     private String imageColor;
 
     @ManyToMany(fetch = FetchType.EAGER)

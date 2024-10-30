@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-integrationTest.properties")
-public class UserControllerIT {
+public class MemberControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
@@ -57,7 +57,7 @@ public class UserControllerIT {
     @Test
     public void sendSignUpRequestAndItReturnsCreatedStatus() throws Exception {
         NewMemberDTO newMemberDTO = new NewMemberDTO("Apple", "Red", "redApple", "123", "red@gmail.com");
-        MvcResult result = mockMvc.perform(post("/api/member/signUp")
+        MvcResult result = mockMvc.perform(post("/api/member/signup")
                         .content(objectMapper.writeValueAsString(newMemberDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -67,7 +67,7 @@ public class UserControllerIT {
         responseContent = responseContent.replace("\"", "");
 
         Member member = memberRepository.findByUsername("redApple").get();
-        String expected = member.getPublicId().toString();
+        String expected = member.getMemberPublicId().toString();
         assertEquals(expected, responseContent);
     }
 

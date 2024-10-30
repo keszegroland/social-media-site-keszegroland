@@ -14,8 +14,8 @@ import java.util.Set;
 public class MemberRole {
 
     @Id
-    @GeneratedValue
-    private int roleId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long roleId;
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true)

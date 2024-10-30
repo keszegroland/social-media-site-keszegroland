@@ -40,7 +40,8 @@ public class MemberController {
     }
 
     @GetMapping("/all")
-    public Set<MemberIdentityDTO> getAllMembers() {
-        return memberService.getAllMembers();
+    @PreAuthorize("isAuthenticated()")
+    public Set<MemberIdentityDTO> getAllMemberIdentities() {
+        return memberService.getAllMemberIdentities();
     }
 }
