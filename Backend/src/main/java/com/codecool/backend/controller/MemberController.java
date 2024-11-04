@@ -34,13 +34,11 @@ public class MemberController {
     }
 
     @GetMapping("/identity")
-    @PreAuthorize("isAuthenticated()")
     public MemberIdentityDTO getMemberIdentity(Principal principal) {
         return memberService.getMemberIdentity(principal.getName());
     }
 
     @GetMapping("/all")
-    @PreAuthorize("isAuthenticated()")
     public Set<MemberIdentityDTO> getAllMemberIdentities() {
         return memberService.getAllMemberIdentities();
     }
