@@ -29,6 +29,11 @@ public class SaveController {
         return saveService.unSavePost(postPublicId, principal.getName());
     }
 
+    @GetMapping("/data/{postPublicId}")
+    public Boolean getSaveDataForPost(@PathVariable UUID postPublicId, Principal principal) {
+        return saveService.getSaveDataForPost(postPublicId, principal.getName());
+    }
+
     @GetMapping("/my-saves")
     public Set<PostDTO> getMySaves(Principal principal) {
         return saveService.getSavesForMember(principal.getName());

@@ -5,6 +5,7 @@ import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Save;
 import com.codecool.backend.repository.SaveRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class SaveService {
         this.memberService = memberService;
     }
 
+    @Transactional
     public UUID savePost(UUID postPublicId, String username) {
         Member member = memberService.getMemberByUsername(username);
         Optional<Save> existingSave = saveRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId());
@@ -40,6 +42,7 @@ public class SaveService {
         return newSave.getSavePublicId();
     }
 
+    @Transactional
     public UUID unSavePost(UUID postPublicId, String username) {
         Member member = memberService.getMemberByUsername(username);
         Optional<Save> save = saveRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId());
@@ -59,4 +62,9 @@ public class SaveService {
                 .collect(Collectors.toSet());
     }
 
+    @Transactional
+    public Boolean getSaveDataForPost(UUID postPublicId, String username) {
+        Member member = memberService.getMemberByUsername(username);
+        return saveRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId()).isPresent();
+    }
 }
