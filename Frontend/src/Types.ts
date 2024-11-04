@@ -4,6 +4,8 @@ export type MethodType = "GET" | "POST" | "DELETE";
 
 export type JWTTokenType = string | null;
 
+export type EndpointType = `/api/likes/${string}` | `/api/saves/${string}`;
+
 export interface MemberIdentity {
   memberPublicId: string;
   username: string;
@@ -59,10 +61,19 @@ export interface NewMember {
   email: string;
 }
 
-export interface LikeButtonProps {
-  isLiked: boolean;
-  handleLikeAction: () => void;
+export interface ReactionButtonProps {
+  status: boolean;
+  handleAction: () => void;
+  activeImgPath: ActiveImgPathType;
+  activeImgText: ActiveImgTextType;
+  unActiveImgPath: UnActicePathType;
+  unActiveImgText: UnActiveImgTextType;
 }
+
+type ActiveImgPathType = "/liked.svg" | "/saved.svg";
+type ActiveImgTextType = "liked" | "saved";
+type UnActicePathType = "/like.svg" | "/save.svg";
+type UnActiveImgTextType = "like" | "save";
 
 export interface LikeTextProps {
   numberOfLikes: number;

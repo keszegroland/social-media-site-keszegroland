@@ -7,7 +7,7 @@ import PageHeader from "../Components/PageHeader";
 async function handleFetchAllMembers(token: JWTTokenType): Promise<MemberIdentity[]> {
   const response: Response = await fetch("/api/member/all", {
     headers: {
-      "Authentication": `Bearer ${token}`
+      'Authorization': "Bearer " + token
     }
   });
   const data: MemberIdentity[] = await response.json();
