@@ -23,6 +23,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,9 +31,11 @@ public class PostServiceTest {
     @Mock
     private PostRepository postRepository;
     @Mock
-    private MemberRepository memberRepository;
-    @Mock
     private ReportRepository reportRepository;
+    @Mock
+    private MemberService memberService;
+    @Mock
+    private MemberRepository memberRepository;
 
     private PostService postService;
 
@@ -43,7 +46,7 @@ public class PostServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        postService = new PostService(postRepository, memberRepository, reportRepository);
+        postService = new PostService(postRepository, reportRepository, memberService);
 
         member = new Member();
         member.setFirstName("Nagy");
@@ -62,15 +65,7 @@ public class PostServiceTest {
     }
 
     private PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(post.getPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate());
-    }
-
-    private String convertImageToBase64(byte[] picture) {
-        String base64Image = null;
-        if (picture != null) {
-            base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(picture);
-        }
-        return base64Image;
+        return postService.convertPostToDTO(post);
     }
 
     private byte[] convertBase64Image(NewPostDTO newPostDTO) {
@@ -93,7 +88,7 @@ public class PostServiceTest {
     @Test
     void testGetPostByMemberPublicId() {
         List<Post> posts = List.of(post);
-        when(postRepository.findAllByMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"))).thenReturn(posts);
+        when(postRepository.findAllByMemberMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"))).thenReturn(posts);
         List<PostDTO> expected = List.of(convertPostToDTO(post));
         List<PostDTO> actual = postService.getPostsByMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"));
         assertEquals(expected, actual);
@@ -120,11 +115,11 @@ public class PostServiceTest {
 
         when(postRepository.save(any(Post.class))).thenAnswer(invocation -> {
             Post savedPost = invocation.getArgument(0);
-            savedPost.setPublicId(generatedUUID);
+            savedPost.setPostPublicId(generatedUUID);
             return savedPost;
         });
 
-        UUID actual = postService.createNewPost(newPostDTO);
+        UUID actual = postService.createNewPost(newPostDTO, member.getUsername());
 
         assertEquals(generatedUUID, actual);
     }
@@ -132,6 +127,7 @@ public class PostServiceTest {
     @Test
     void testCreateNewPostFail() {
         NewPostDTO postDTO = new NewPostDTO("meow", "");
-        assertThrows(RuntimeException.class, () -> postService.createNewPost(postDTO));
+        when(postRepository.save(any(Post.class))).thenThrow(RuntimeException.class);
+        assertThrows(RuntimeException.class, () -> postService.createNewPost(postDTO, member.getUsername()));
     }
 }

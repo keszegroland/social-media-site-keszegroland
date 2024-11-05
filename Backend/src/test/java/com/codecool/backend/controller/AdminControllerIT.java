@@ -94,8 +94,8 @@ public class AdminControllerIT {
     @WithMockUser(username = "admin", roles = "ADMIN")
     void givenMembers_WhenGetAllMembers_ThenReturnMembersList() throws Exception {
         List<MemberDTO> memberDTOList = List.of(
-                new MemberDTO(member1.getPublicId(), member1.getFirstName(), member1.getLastName(), member1.getUsername(), member1.getEmail(), member1.getRoles()),
-                new MemberDTO(member2.getPublicId(), member2.getFirstName(), member2.getLastName(), member2.getUsername(), member2.getEmail(), member2.getRoles())
+                new MemberDTO(member1.getMemberPublicId(), member1.getFirstName(), member1.getLastName(), member1.getUsername(), member1.getEmail(), member1.getRoles()),
+                new MemberDTO(member2.getMemberPublicId(), member2.getFirstName(), member2.getLastName(), member2.getUsername(), member2.getEmail(), member2.getRoles())
         );
 
         mockMvc.perform(get("/api/admin/getAllMember")
@@ -113,7 +113,7 @@ public class AdminControllerIT {
 
         assertEquals(userRole.getRole(), promoteMemberRoles.stream().findAny().get().getRole());
 
-        MemberDTO expectedPromotedMemberDTO = new MemberDTO(member2.getPublicId(), member2.getFirstName(), member2.getLastName(), member2.getUsername(), member2.getEmail(), Set.of(userRole, adminRole));
+        MemberDTO expectedPromotedMemberDTO = new MemberDTO(member2.getMemberPublicId(), member2.getFirstName(), member2.getLastName(), member2.getUsername(), member2.getEmail(), Set.of(userRole, adminRole));
 
         mockMvc.perform(put("/api/admin/promote/{username}", member2.getUsername())
                         .contentType(MediaType.APPLICATION_JSON))

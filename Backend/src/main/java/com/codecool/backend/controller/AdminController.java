@@ -21,12 +21,12 @@ public class AdminController {
 
     @GetMapping("/getAllMember")
     public List<MemberDTO> getAllMember() {
-        return adminService.getAllMember();
+        return adminService.getAllMemberDTOs();
     }
 
     @GetMapping("/posts")
     public List<PostDTO> getReportedPosts() {
-        return adminService.getReportedPosts();
+        return adminService.getAllReportedPosts();
     }
 
     @PutMapping("/promote/{username}")
@@ -34,15 +34,13 @@ public class AdminController {
         return adminService.promoteUserToAdmin(username);
     }
 
-    @DeleteMapping("/deleteMember/{publicId}")
-    public UUID deleteMemberByPublicId(@PathVariable UUID publicId) {
-        adminService.deleteMemberByPublicId(publicId);
-        return publicId;
+    @DeleteMapping("/deleteMember/{memberPublicId}")
+    public UUID deleteMemberByPublicId(@PathVariable UUID memberPublicId) {
+        return adminService.deleteMemberByPublicId(memberPublicId);
     }
 
-    @DeleteMapping("/deletePost/{publicId}")
-    public UUID deletePostByPublicId(@PathVariable UUID publicId) {
-        adminService.deletePostByPublicId(publicId);
-        return publicId;
+    @DeleteMapping("/deletePost/{postPublicId}")
+    public UUID deletePostByPublicId(@PathVariable UUID postPublicId) {
+        return adminService.deletePostByPublicId(postPublicId);
     }
 }

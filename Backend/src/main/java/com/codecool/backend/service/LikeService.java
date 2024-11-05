@@ -5,8 +5,6 @@ import com.codecool.backend.model.Like;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.repository.LikeRepository;
-import com.codecool.backend.repository.MemberRepository;
-import com.codecool.backend.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,28 +15,28 @@ import java.util.UUID;
 @Service
 public class LikeService {
     private final LikeRepository likeRepository;
-    private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
+    private final PostService postService;
 
     @Autowired
-    public LikeService(LikeRepository likeRepository, PostRepository postRepository, MemberRepository memberRepository) {
+    public LikeService(LikeRepository likeRepository, MemberService memberService, PostService postService) {
         this.likeRepository = likeRepository;
-        this.postRepository = postRepository;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
+        this.postService = postService;
     }
 
     @Transactional
     public UUID likePost(UUID postPublicId, String username) {
-        Member member = findMemberByUsername(username);
+        Member member = memberService.getMemberByUsername(username);
 
-        Optional<Like> existingLike = likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId());
+        Optional<Like> existingLike = likeRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId());
         if (existingLike.isPresent()) {
             throw new RuntimeException("Member has already liked this post.");
         }
 
         Like newLike = new Like();
         newLike.setMember(member);
-        Post likedPost = postRepository.findByPublicId(postPublicId);
+        Post likedPost = postService.getPostByPublicId(postPublicId);
         newLike.setPost(likedPost);
         likeRepository.save(newLike);
         return newLike.getLikePublicId();
@@ -46,8 +44,8 @@ public class LikeService {
 
     @Transactional
     public UUID unlikePost(UUID postPublicId, String username) {
-        Member member = findMemberByUsername(username);
-        Optional<Like> like = likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId());
+        Member member = memberService.getMemberByUsername(username);
+        Optional<Like> like = likeRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId());
         if (like.isPresent()) {
             likeRepository.delete(like.get());
             return like.get().getLikePublicId();
@@ -56,32 +54,21 @@ public class LikeService {
         }
     }
 
-    private Member findMemberByUsername(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Member not found with username: " + username));
-    }
-
     private boolean isPostLikedByLoggedInMember(UUID postPublicId, String username) {
-        Member member = findMemberByUsername(username);
-        return likeRepository.findByPostPublicIdAndMemberPublicId(postPublicId, member.getPublicId()).isPresent();
+        Member member = memberService.getMemberByUsername(username);
+        return likeRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId()).isPresent();
     }
 
     private String getTheUsernameOfTheFirstLikerForPost(UUID postPublicId) {
-        return likeRepository.findFirstByPostPublicId(postPublicId)
-                .map(like -> like.getMember().getUsername())
-                .orElse("No likes yet.");
+        return likeRepository.findFirstByPostPostPublicId(postPublicId).map(like -> like.getMember().getUsername()).orElse("No likes yet.");
     }
 
     private int getTotalNumberOfLikes(UUID postPublicId) {
-        return likeRepository.findByPostPublicId(postPublicId).size();
+        return likeRepository.findByPostPostPublicId(postPublicId).size();
     }
 
     @Transactional
     public LikeDTO getLikesDataForPost(UUID postPublicId, String username) {
-        return new LikeDTO(
-                isPostLikedByLoggedInMember(postPublicId, username),
-                getTheUsernameOfTheFirstLikerForPost(postPublicId),
-                getTotalNumberOfLikes(postPublicId)
-        );
+        return new LikeDTO(isPostLikedByLoggedInMember(postPublicId, username), getTheUsernameOfTheFirstLikerForPost(postPublicId), getTotalNumberOfLikes(postPublicId));
     }
 }

@@ -34,7 +34,7 @@ function Home() {
           <PageHeader headerName="Home Feed" />
           <ul className="flex flex-col">
             {posts.map((post) => (
-              <OnePost key={post.publicId} post={post} />
+              <OnePost key={post.postPublicId} post={post} />
             ))}
           </ul>
         </div>

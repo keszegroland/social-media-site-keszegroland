@@ -7,7 +7,7 @@ import PageHeader from "../Components/PageHeader";
 async function handleFetchAllMembers(token: JWTTokenType): Promise<MemberIdentity[]> {
   const response: Response = await fetch("/api/member/all", {
     headers: {
-      "Authentication": `Bearer ${token}`
+      'Authorization': "Bearer " + token
     }
   });
   const data: MemberIdentity[] = await response.json();
@@ -34,7 +34,7 @@ function People() {
           <div className="h-full w-full lg:pb-8 mb-36 md:mb-0">
             <ul className="w-full grid gap-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
               {members.map(member => (
-                <OneMember key={member.publicId} member={member} />
+                <OneMember key={member.memberPublicId} member={member} />
               ))}
             </ul>
           </div>

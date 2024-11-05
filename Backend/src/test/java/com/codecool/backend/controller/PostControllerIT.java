@@ -65,7 +65,7 @@ public class PostControllerIT {
         Post post = new Post();
         post.setMember(member);
         post.setDescription("meow");
-        post.setPublicId(UUID.fromString("84ba7cdd-abf9-4fde-8c3a-2ac9eac67006"));
+        post.setPostPublicId(UUID.fromString("84ba7cdd-abf9-4fde-8c3a-2ac9eac67006"));
         post.setPicture("".getBytes());
         post.setNumOfReport(0);
         postRepository.save(post);
@@ -89,9 +89,9 @@ public class PostControllerIT {
     void testGetAllPosts() throws Exception {
         mockMvc.perform(get("/api/post/all"))
                 .andExpect(status().isOk());
-        UUID postId = postRepository.findAll().getFirst().getPublicId();
+        UUID postId = postRepository.findAll().getFirst().getPostPublicId();
         List<Post> posts = postRepository.findAll();
-        Post post = postRepository.findByPublicId(postId);
+        Post post = postRepository.findByPostPublicId(postId);
         assertEquals(post.getDescription(), "meow");
         assertEquals(posts.size(), 1);
     }

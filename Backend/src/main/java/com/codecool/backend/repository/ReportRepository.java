@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
-    Optional<Report> findReportByMemberAndPostId(Member member, long postId);
+
+    Optional<Report> findReportByMemberAndPostPostId(Member member, long postId);
 }

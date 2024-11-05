@@ -15,23 +15,27 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AdminServiceTest {
     @Mock
-    private PostRepository postRepository;
+    private MemberService memberService;
     @Mock
     private MemberRepository memberRepository;
     @Mock
     private MemberRoleRepository memberRoleRepository;
+    @Mock
+    private PostService postService;
+    @Mock
+    private PostRepository postRepository;
+
     private AdminService adminService;
+
 
     private Post post;
     private Member member;
@@ -39,63 +43,54 @@ public class AdminServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.adminService = new AdminService(postRepository, memberRepository, memberRoleRepository);
+        this.adminService = new AdminService(memberService, memberRepository, memberRoleRepository, postService);
 
         member = new Member();
         member.setFirstName("Nagy");
         member.setLastName("Lajos");
-        member.setUsername("nagy_mancs");
-        member.setPassword("Meow123");
-        member.setEmail("mancs@gmail.com");
-        memberRepository.save(member);
-        member.setPublicId(UUID.fromString("efc544d8-9ed6-4dfb-968b-1b939d202ee8"));
+        member.setUsername("nagyLajos");
+        member.setPassword("myPassword");
+        member.setEmail("nagyLajos@gmail.com");
+        member.setMemberPublicId(UUID.fromString("efc544d8-9ed6-4dfb-968b-1b939d202ee8"));
 
         post = new Post();
+        post.setPostPublicId(UUID.fromString("1a2b3c4d-9ed6-4dfb-968b-1b939d202ee8"));
         post.setDescription("meow");
         post.setPicture("".getBytes());
         post.setMember(member);
         post.setNumOfReport(2);
-        postRepository.save(post);
-    }
-
-    private String convertImageToBase64(byte[] picture) {
-        String base64Image = null;
-        if (picture != null) {
-            base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(picture);
-        }
-        return base64Image;
     }
 
     @Test
-    void testGetReportedPosts() {
-        when(postRepository.findByNumOfReportGreaterThan(0)).thenReturn(List.of(post));
-        List<Post> reported = List.of(post);
-        List<PostDTO> expectedReportedPosts = reported.stream().map(post -> new PostDTO(post.getPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate())).toList();
-        List<PostDTO> actualReportedPosts = adminService.getReportedPosts();
-        assertEquals(expectedReportedPosts, actualReportedPosts);
+    void testGetAllReportedPosts() {
+        PostDTO postDTO = new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), "", post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        when(postService.getAllReportedPosts()).thenReturn(List.of(postDTO));
+        adminService.getAllReportedPosts();
+        verify(postService).getAllReportedPosts();
     }
 
     @Test
-    void testGetAllMember() {
+    void testGetAllMemberDTOs() {
         List<Member> members = List.of(member);
-        when(memberRepository.findAll()).thenReturn(members);
         List<MemberDTO> expectedMembers = members.stream()
-                .map(member -> new MemberDTO(member.getPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getEmail(), member.getRoles()))
+                .map(member -> new MemberDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getEmail(), member.getRoles()))
                 .toList();
-        List<MemberDTO> actualMembers = adminService.getAllMember();
+        when(memberService.getAllMembers()).thenReturn(new HashSet<>(members));
+        List<MemberDTO> actualMembers = adminService.getAllMemberDTOs();
+        verify(memberService).getAllMembers();
         assertEquals(expectedMembers, actualMembers);
     }
 
     @Test
     void testPromoteUserToAdmin_WhenUserDoesNotHaveAdminRole() {
-        when(memberRepository.findByUsername("nagy_mancs")).thenReturn(Optional.of(member));
+        when(memberService.getMemberByUsername("nagyLajos")).thenReturn(member);
         when(memberRoleRepository.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.empty());
         MemberRole role = new MemberRole();
         role.setRole(Role.ROLE_ADMIN);
         member.addRole(role);
-        MemberDTO expected = new MemberDTO(member.getPublicId(), member.getFirstName(), member.getLastName(),
+        MemberDTO expected = new MemberDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(),
                 member.getUsername(), member.getEmail(), member.getRoles());
-        MemberDTO actual = adminService.promoteUserToAdmin("nagy_mancs");
+        MemberDTO actual = adminService.promoteUserToAdmin("nagyLajos");
         assertEquals(expected, actual);
         Mockito.verify(memberRoleRepository).save(any(MemberRole.class));
     }
@@ -106,12 +101,12 @@ public class AdminServiceTest {
         role.setRole(Role.ROLE_ADMIN);
         member.addRole(role);
 
-        when(memberRepository.findByUsername("nagy_mancs")).thenReturn(Optional.of(member));
+        when(memberService.getMemberByUsername("nagyLajos")).thenReturn(member);
         when(memberRoleRepository.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.of(role));
 
-        MemberDTO expected = new MemberDTO(member.getPublicId(), member.getFirstName(), member.getLastName(),
+        MemberDTO expected = new MemberDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(),
                 member.getUsername(), member.getEmail(), member.getRoles());
-        MemberDTO actual = adminService.promoteUserToAdmin("nagy_mancs");
+        MemberDTO actual = adminService.promoteUserToAdmin("nagyLajos");
         assertEquals(expected, actual);
     }
 }

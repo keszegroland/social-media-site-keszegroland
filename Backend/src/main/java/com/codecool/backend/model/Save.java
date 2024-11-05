@@ -8,20 +8,20 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.UUID;
 
 @Entity
-@Table(name = "likes", uniqueConstraints = {
-        @UniqueConstraint(name="unique_post_member_like",
+@Table(name = "saves", uniqueConstraints = {
+        @UniqueConstraint(name = "unique_post_member_save",
                 columnNames = {"postId", "memberId"})
 })
 @Getter
 @Setter
-public class Like {
+public class Save {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long likeId;
+    private long saveId;
 
     @UuidGenerator
-    private UUID likePublicId;
+    private UUID savePublicId;
 
     @ManyToOne
     @JoinColumn(name = "postId")

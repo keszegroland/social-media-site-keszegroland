@@ -48,19 +48,20 @@ public class MemberService {
             throw new MemberIsAlreadyExistsException(format("member %s already exists", memberDTO.username()));
         }
 
-        Member member = createMemberEntity(memberDTO);
+        Member newMember = createMemberEntity(memberDTO);
         Optional<MemberRole> userRole = memberRoleRepository.findByRole(Role.ROLE_USER);
 
         if (userRole.isEmpty()) {
             MemberRole newMemberRole = new MemberRole();
             newMemberRole.setRole(Role.ROLE_USER);
-            member.getRoles().add(newMemberRole);
+            newMember.getRoles().add(newMemberRole);
             memberRoleRepository.save(newMemberRole);
         } else {
-            member.getRoles().add(userRole.get());
+            newMember.getRoles().add(userRole.get());
         }
-        memberRepository.save(member);
-        return member.getPublicId();
+        memberRepository.save(newMember);
+        System.out.println(newMember.getRoles());
+        return newMember.getMemberPublicId();
     }
 
     private Member createMemberEntity(NewMemberDTO memberDTO) {
@@ -83,14 +84,27 @@ public class MemberService {
     }
 
     public MemberIdentityDTO getMemberIdentity(String username) {
-        return memberRepository.findByUsername(username).map(this::convertMemberToMemberIdentityDTO).orElseThrow(() -> new MemberIsNotFoundException("User not found"));
+        Member member = getMemberByUsername(username);
+        return convertMemberToMemberIdentityDTO(member);
     }
 
-    public Set<MemberIdentityDTO> getAllMembers() {
-        return memberRepository.findAll().stream().map(this::convertMemberToMemberIdentityDTO).collect(Collectors.toSet());
+    public Set<MemberIdentityDTO> getAllMemberIdentities() {
+        return getAllMembers().stream()
+                .map(this::convertMemberToMemberIdentityDTO)
+                .collect(Collectors.toSet());
     }
 
     private MemberIdentityDTO convertMemberToMemberIdentityDTO(Member member) {
-        return new MemberIdentityDTO(member.getPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getImageColor());
+        return new MemberIdentityDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getImageColor());
     }
+
+    protected Set<Member> getAllMembers() {
+        return new HashSet<>(memberRepository.findAll());
+    }
+
+    protected Member getMemberByUsername(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new MemberIsNotFoundException(format("Member with username %s could not be found in the database.", username)));
+    }
+
 }
