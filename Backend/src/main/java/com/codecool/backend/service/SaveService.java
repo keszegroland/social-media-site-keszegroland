@@ -1,6 +1,7 @@
 package com.codecool.backend.service;
 
 import com.codecool.backend.controller.dto.PostDTO;
+import com.codecool.backend.controller.dto.SavedPostDTO;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Save;
@@ -54,11 +55,12 @@ public class SaveService {
         }
     }
 
-    public Set<PostDTO> getSavesForMember(String username) {
+    @Transactional
+    public Set<SavedPostDTO> getSavesForMember(String username) {
         Member member = memberService.getMemberByUsername(username);
         Set<Save> saves = saveRepository.findByMemberMemberPublicId(member.getMemberPublicId());
         return saves.stream()
-                .map(save -> postService.convertPostToDTO(save.getPost()))
+                .map(this::convertSaveToSavePostDTO)
                 .collect(Collectors.toSet());
     }
 
@@ -67,4 +69,15 @@ public class SaveService {
         Member member = memberService.getMemberByUsername(username);
         return saveRepository.findByPostPostPublicIdAndMemberMemberPublicId(postPublicId, member.getMemberPublicId()).isPresent();
     }
+
+    @Transactional
+    public PostDTO getSavedPostByPublicId(UUID postPublicId) {
+        Post searchedPost = postService.getPostByPublicId(postPublicId);
+        return postService.convertPostToDTO(searchedPost);
+    }
+
+    private SavedPostDTO convertSaveToSavePostDTO(Save save) {
+        return new SavedPostDTO(save.getPost().getPostPublicId(), postService.convertImageToBase64(save.getPost().getPicture()));
+    }
+
 }
