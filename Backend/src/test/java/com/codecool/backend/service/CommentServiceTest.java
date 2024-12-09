@@ -61,7 +61,7 @@ public class CommentServiceTest {
 
     @Test
     void testCreateCommentSuccessful() {
-        NewCommentDTO commentDTO = new NewCommentDTO("I like this post!", member.getUsername(), post.getPostPublicId());
+        NewCommentDTO commentDTO = new NewCommentDTO("I like this post!");
         UUID generatedId = UUID.fromString("1bdd6b66-4064-410d-9e74-eeaddb913796");
         when(memberRepository.findByMemberPublicId(UUID.fromString("efc544d8-9ed6-4dfb-968b-1b939d202ee8"))).thenReturn(Optional.of(member));
         when(commentRepository.save(any(Comment.class))).thenAnswer(invocation -> {
@@ -69,14 +69,14 @@ public class CommentServiceTest {
             savedComment.setCommentPublicId(generatedId);
             return savedComment;
         });
-        UUID actual = commentService.createComment(commentDTO);
+        UUID actual = commentService.createComment(commentDTO, post.getPostPublicId(), member.getUsername());
         assertEquals(generatedId, actual);
     }
 
     @Test
     void testCreateCommentFailed() {
-        NewCommentDTO commentDTO = new NewCommentDTO("I like this post!", member.getUsername(), post.getPostPublicId());
+        NewCommentDTO commentDTO = new NewCommentDTO("I like this post!");
         when(commentRepository.save(any(Comment.class))).thenThrow(new RuntimeException());
-        assertThrows(RuntimeException.class, () -> commentService.createComment(commentDTO));
+        assertThrows(RuntimeException.class, () -> commentService.createComment(commentDTO, post.getPostPublicId(), member.getUsername()));
     }
 }
