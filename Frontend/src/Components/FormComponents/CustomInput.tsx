@@ -1,4 +1,4 @@
-import { InputFieldProps } from "../../Types";
+import { InputFieldProps } from "../../Types/MemberTypes";
 
 function CustomInput({ label, type, value, icon, onChange }: InputFieldProps) {
 
