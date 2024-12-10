@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import getToken from "../../../Utils/getToken";
-import { JWTTokenType, MemberIdentity } from "../../../Types";
+import { JWTTokenType } from "../../../Types/PostTypes";
 import MemberImage from "../../People/MemberImage";
+import { MemberIdentity } from "../../../Types/MemberTypes";
+import { useAuth } from "../../../Utils/AuthProvider";
 
 async function fetchSignedInMemberIdentity(token: JWTTokenType): Promise<MemberIdentity> {
   const res: Response = await fetch("/api/member/identity", {
@@ -15,7 +16,7 @@ async function fetchSignedInMemberIdentity(token: JWTTokenType): Promise<MemberI
 
 function MemberBadge() {
   const [memberDetails, setMemberDetails] = useState<MemberIdentity | null>(null);
-  const token = getToken();
+  const { token } = useAuth();
 
   useEffect(() => {
     async function getSignedInMemberIdentity() {
@@ -27,7 +28,7 @@ function MemberBadge() {
 
 
   return (
-    <div className="hidden md:flex md:flex-row md:pl-3 md:gap-3 md:w-11/12 md:justify-start md:text-lg">
+    <div className="hidden md:flex md:flex-row md:pl-3 md:gap-3 md:w-full md:justify-start md:text-lg">
       {memberDetails && (
         <>
           <MemberImage firstName={memberDetails.firstName} lastName={memberDetails.lastName} imageColor={memberDetails.imageColor} />

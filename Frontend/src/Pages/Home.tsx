@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import OnePost from "../Components/Home/Post/OnePost";
 import PageHeader from "../Components/PageHeader";
-import { JWTTokenType, Post } from "../Types";
-import getToken from "../Utils/getToken";
+import { JWTTokenType, Post } from "../Types/PostTypes";
+import { useAuth } from "../Utils/AuthProvider";
 
 async function getAllPosts(token: JWTTokenType) {
   const res: Response = await fetch("/api/post/all", {
@@ -16,7 +16,7 @@ async function getAllPosts(token: JWTTokenType) {
 
 function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const token: JWTTokenType = getToken();
+  const { token } = useAuth();
 
   useEffect(() => {
     async function fetchAllPosts() {
