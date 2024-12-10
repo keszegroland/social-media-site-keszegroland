@@ -79,7 +79,7 @@ public class PostService {
         return null;
     }
 
-    private String convertImageToBase64(byte[] picture) {
+    protected String convertImageToBase64(byte[] picture) {
         String base64Image = null;
         if (picture != null) {
             base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(picture);

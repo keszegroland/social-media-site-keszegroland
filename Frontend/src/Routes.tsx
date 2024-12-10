@@ -5,13 +5,14 @@ import ProtectedRoute from "./Utils/ProtectedRoute";
 import Home from "./Pages/Home";
 import SideNavbar from "./Components/Home/SideBar/SideNavbar";
 import People from "./Pages/People";
+import SavedPosts from "./Pages/SavedPosts";
 
 export const router = createBrowserRouter(
   [
     {
       path: '/',
       element: <ProtectedRoute>
-        <div className="w-full h-full">
+        <div className="w-full h-full scrollbar-thin scrollbar-thumb-[#2E282A] scrollbar-track-[#ede6d4] overflow-y-scroll">
           <SideNavbar />
           <div className="w-full h-full md:ml-60 lg:ml-64 xl:ml-72">
             <Outlet />
@@ -26,6 +27,10 @@ export const router = createBrowserRouter(
         {
           path: "/people",
           element: <People />
+        },
+        {
+          path: "/saved",
+          element: <SavedPosts />
         }
       ],
     },

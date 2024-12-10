@@ -5,7 +5,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 type ProtectedRouteProps = PropsWithChildren;
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const token: string | null = useAuth();
+  const { token } = useAuth();
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {

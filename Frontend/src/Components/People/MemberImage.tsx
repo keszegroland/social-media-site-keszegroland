@@ -1,4 +1,4 @@
-import { MemberImageProps } from "../../Types";
+import { MemberImageProps } from "../../Types/MemberTypes";
 
 function MemberImage({ firstName, lastName, imageColor }: MemberImageProps) {
 

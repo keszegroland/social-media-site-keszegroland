@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import getToken from "../../../../Utils/getToken";
 import LikeText from "./LikeText";
 import CommentButton from "./CommentButton";
-import { EndpointType, FooterPostProps, JWTTokenType, LikeData, MethodType } from "../../../../Types";
+import { EndpointType, FooterPostProps, JWTTokenType, LikeData, MethodType } from "../../../../Types/PostTypes";
 import ReactionButton from "./ReactionButton";
+import { useAuth } from "../../../../Utils/AuthProvider";
 
 async function fetchLikeDataForPost(postPublicId: string, token: JWTTokenType): Promise<LikeData> {
   const response: Response = await fetch(`/api/likes/data/${postPublicId}`, {
@@ -42,7 +42,7 @@ function FooterPost({ postPublicId }: FooterPostProps) {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
   const [usernameOfTheFirstLiker, setUsernameOfTheFirstLiker] = useState<string>("");
-  const token = getToken();
+  const { token } = useAuth();
 
   useEffect(() => {
     async function getLikeDataForPost() {
@@ -86,7 +86,7 @@ function FooterPost({ postPublicId }: FooterPostProps) {
   }
 
   return (
-    <div className="fle flex-col x w-full">
+    <div className="flex flex-col w-full">
       <div className="flex w-full justify-between">
         <div className="flex gap-2">
           <ReactionButton status={isLiked} handleAction={handleLikeAction} activeImgPath="/liked.svg" activeImgText="liked" unActiveImgPath="/like.svg" unActiveImgText="like" />

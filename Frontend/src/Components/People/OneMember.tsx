@@ -1,4 +1,4 @@
-import { OneMemberProps } from "../../Types";
+import { OneMemberProps } from "../../Types/MemberTypes";
 import MemberImage from "./MemberImage";
 
 function OneMember({ member }: OneMemberProps) {
