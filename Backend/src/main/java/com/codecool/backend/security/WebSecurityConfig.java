@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/post/**").hasRole("USER")
                                 .requestMatchers("/api/comments/**").hasRole("USER")
                                 .requestMatchers("/api/likes/**").hasRole("USER")
-                                .requestMatchers("/api/saves/**").hasRole("USER")
+                                .requestMatchers("/api/savedPosts/**").hasRole("USER")
                 );
 
         http.authenticationProvider(authenticationProvider());

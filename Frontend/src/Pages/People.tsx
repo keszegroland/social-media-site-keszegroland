@@ -3,7 +3,7 @@ import { JWTTokenType } from "../Types/PostTypes";
 import OneMember from "../Components/People/OneMember";
 import PageHeader from "../Components/PageHeader";
 import { MemberIdentity } from "../Types/MemberTypes";
-import { useAuth } from "../Utils/AuthProvider";
+import useAuth from "../Utils/UseAuth";
 
 async function handleFetchAllMembers(token: JWTTokenType): Promise<MemberIdentity[]> {
   const response: Response = await fetch("/api/member/all", {

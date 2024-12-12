@@ -4,7 +4,7 @@ export type MethodType = "POST" | "DELETE";
 
 export type JWTTokenType = string | null;
 
-export type EndpointType = `/api/likes/${string}` | `/api/saves/${string}`;
+export type EndpointType = `/api/likes/${string}` | `/api/savedPosts/${string}`;
 
 type ActiveImgPathType = "/liked.svg" | "/saved.svg";
 type ActiveImgTextType = "liked" | "saved";

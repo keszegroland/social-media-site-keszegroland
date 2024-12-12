@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { JWTTokenType, SavedPost } from "../Types/PostTypes";
 import PageHeader from "../Components/PageHeader";
 import OneSavedPost from "../Components/Saved/OneSavedPost";
-import { useAuth } from "../Utils/AuthProvider";
+import useAuth from "../Utils/UseAuth";
 
 async function getSavedPosts(token: JWTTokenType): Promise<SavedPost[]> {
-  const response: Response = await fetch("/api/saves/my-saves", {
+  const response: Response = await fetch("/api/savedPosts/my-savedPosts", {
     headers: {
       "Authorization": `Bearer ${token}`
     }

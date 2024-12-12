@@ -25,7 +25,7 @@ public class CommentController {
         return commentService.createComment(newComment, postPublicId, principal.getName());
     }
 
-    @GetMapping("/all/{postPublicId}")
+    @GetMapping("/{postPublicId}/all")
     public List<CommentDTO> getAllCommentsForPost(@PathVariable UUID postPublicId) {
         return commentService.getAllCommentsForPost(postPublicId);
     }

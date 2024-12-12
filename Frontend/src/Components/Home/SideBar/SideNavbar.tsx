@@ -1,4 +1,4 @@
-import { useAuth } from "../../../Utils/AuthProvider";
+import useAuth from "../../../Utils/UseAuth";
 import CustomMenuItem from "./CustomMenuItem";
 import LogoBadge from "./LogoBadge";
 import MemberBadge from "./MemberBadge";

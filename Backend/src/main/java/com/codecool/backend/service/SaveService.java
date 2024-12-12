@@ -6,6 +6,7 @@ import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Save;
 import com.codecool.backend.repository.SaveRepository;
+import com.codecool.backend.utils.ImageConverter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,14 @@ public class SaveService {
     private final SaveRepository saveRepository;
     private final PostService postService;
     private final MemberService memberService;
+    private final ImageConverter imageConverter;
 
     @Autowired
-    public SaveService(SaveRepository saveRepository, PostService postService, MemberService memberService) {
+    public SaveService(SaveRepository saveRepository, PostService postService, MemberService memberService, ImageConverter imageConverter) {
         this.saveRepository = saveRepository;
         this.postService = postService;
         this.memberService = memberService;
+        this.imageConverter = imageConverter;
     }
 
     @Transactional
@@ -56,12 +59,10 @@ public class SaveService {
     }
 
     @Transactional
-    public Set<SavedPostDTO> getSavesForMember(String username) {
+    public Set<SavedPostDTO> getSavedPostsForMember(String username) {
         Member member = memberService.getMemberByUsername(username);
         Set<Save> saves = saveRepository.findByMemberMemberPublicId(member.getMemberPublicId());
-        return saves.stream()
-                .map(this::convertSaveToSavePostDTO)
-                .collect(Collectors.toSet());
+        return saves.stream().map(this::convertSaveToSavePostDTO).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -77,7 +78,7 @@ public class SaveService {
     }
 
     private SavedPostDTO convertSaveToSavePostDTO(Save save) {
-        return new SavedPostDTO(save.getPost().getPostPublicId(), postService.convertImageToBase64(save.getPost().getPicture()));
+        return new SavedPostDTO(save.getPost().getPostPublicId(), imageConverter.toBase64(save.getPost().getPicture()));
     }
 
 }

@@ -3,7 +3,7 @@ import LikeText from "./LikeText";
 import CommentButton from "./CommentButton";
 import { EndpointType, FooterPostProps, JWTTokenType, LikeData, MethodType } from "../../../../Types/PostTypes";
 import ReactionButton from "./ReactionButton";
-import { useAuth } from "../../../../Utils/AuthProvider";
+import useAuth from "../../../../Utils/UseAuth";
 
 async function fetchLikeDataForPost(postPublicId: string, token: JWTTokenType): Promise<LikeData> {
   const response: Response = await fetch(`/api/likes/data/${postPublicId}`, {
@@ -16,7 +16,7 @@ async function fetchLikeDataForPost(postPublicId: string, token: JWTTokenType): 
 }
 
 async function fetchSaveDataForPost(postPublicId: string, token: JWTTokenType): Promise<boolean> {
-  const response: Response = await fetch(`/api/saves/data/${postPublicId}`, {
+  const response: Response = await fetch(`/api/savedPosts/data/${postPublicId}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -78,7 +78,7 @@ function FooterPost({ postPublicId }: FooterPostProps) {
   async function handleSaveAction() {
     try {
       setIsSaved((prevIsSaved) => !prevIsSaved);
-      await handleReactionToggle(isSaved ? "DELETE" : "POST", `/api/saves/${isSaved ? "unSave" : "save"}/${postPublicId}`, token);
+      await handleReactionToggle(isSaved ? "DELETE" : "POST", `/api/savedPosts/${isSaved ? "unSave" : "save"}/${postPublicId}`, token);
     } catch (error) {
       console.error(error);
       setIsSaved((prevIsSaved) => !prevIsSaved);

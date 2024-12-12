@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useContext, useState } from "react"
+import { PropsWithChildren, createContext, useState } from "react"
 import { JWTTokenType } from "../Types/PostTypes";
 
 interface AuthContextType {
@@ -7,35 +7,26 @@ interface AuthContextType {
   signOut: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<JWTTokenType>(localStorage.getItem('jwt'));
 
-  function updateToken(newToken: JWTTokenType) {
+  function signIn(newToken: JWTTokenType) {
     if (newToken) {
       localStorage.setItem('jwt', newToken);
-    } else {
-      localStorage.removeItem('jwt');
+      setToken(newToken);
     }
-    setToken(newToken);
   }
 
   function signOut() {
-    updateToken(null);
+    localStorage.removeItem('jwt');
+    signIn(null);
   }
 
   return (
-    <AuthContext.Provider value={{ token, setToken: updateToken, signOut }}>
+    <AuthContext.Provider value={{ token, setToken: signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('userAuth must be used within AuthProvider');
-  }
-  return context;
 };

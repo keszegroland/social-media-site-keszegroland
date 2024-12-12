@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { JwtResponse, MemberAuth } from "../../Types/MemberTypes";
-import { useAuth } from "../../Utils/AuthProvider";
+import useAuth from "../../Utils/UseAuth";
 
 async function signInWithMember(member: MemberAuth): Promise<JwtResponse> {
   const res = await fetch('/api/member/login', {

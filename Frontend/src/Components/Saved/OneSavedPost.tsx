@@ -15,9 +15,7 @@ function OneSavedPost({ savedPost }: SavedPostProps) {
 
   return (
     <li className="flex justify-center items-center">
-      <label htmlFor="my_modal_6" onClick={handleOpenModal}>
-        <img className="w-96 h-96 object-cover rounded-2xl border-neutral border cursor-pointer" src={savedPost.picture} alt="Saved post" />
-      </label>
+      <img className="w-96 h-96 object-cover rounded-2xl border-neutral border cursor-pointer" src={savedPost.picture} alt="Saved post" onClick={handleOpenModal} />
       {isModalOpen && <OpenSavedPost postPublicId={savedPost.postPublicId} onClose={handleCloseModal} />}
     </li>
   )

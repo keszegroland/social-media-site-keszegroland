@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JWTTokenType } from "../../../Types/PostTypes";
 import MemberImage from "../../People/MemberImage";
 import { MemberIdentity } from "../../../Types/MemberTypes";
-import { useAuth } from "../../../Utils/AuthProvider";
+import useAuth from "../../../Utils/UseAuth";
 
 async function fetchSignedInMemberIdentity(token: JWTTokenType): Promise<MemberIdentity> {
   const res: Response = await fetch("/api/member/identity", {

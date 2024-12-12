@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Comment, CommentSectionProps, JWTTokenType } from "../../Types/PostTypes";
 import MemberSignature from "./MemberSignature";
-import { useAuth } from "../../Utils/AuthProvider";
+import useAuth from "../../Utils/UseAuth";
 
 async function fetchCommentsForPost(token: JWTTokenType, postPublicId: string): Promise<Comment[]> {
-  const response: Response = await fetch(`/api/comments/all/${postPublicId}`, {
+  const response: Response = await fetch(`/api/comments/${postPublicId}/all`, {
     headers: {
       "Authorization": `Bearer ${token}`,
     }

@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/saves")
+@RequestMapping("/api/savedPosts")
 public class SaveController {
     private final SaveService saveService;
 
@@ -35,9 +35,9 @@ public class SaveController {
         return saveService.getSaveDataForPost(postPublicId, principal.getName());
     }
 
-    @GetMapping("/my-saves")
-    public Set<SavedPostDTO> getMySaves(Principal principal) {
-        return saveService.getSavesForMember(principal.getName());
+    @GetMapping("/my-savedPosts")
+    public Set<SavedPostDTO> getMySavedPosts(Principal principal) {
+        return saveService.getSavedPostsForMember(principal.getName());
     }
 
     @GetMapping("/{postPublicId}")

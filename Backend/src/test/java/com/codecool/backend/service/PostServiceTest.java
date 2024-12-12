@@ -7,6 +7,7 @@ import com.codecool.backend.model.Post;
 import com.codecool.backend.repository.MemberRepository;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.repository.ReportRepository;
+import com.codecool.backend.utils.ImageConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,7 +24,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +37,9 @@ public class PostServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private ImageConverter imageConverter;
+
     private PostService postService;
 
     private Post post;
@@ -46,7 +49,7 @@ public class PostServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        postService = new PostService(postRepository, reportRepository, memberService);
+        postService = new PostService(postRepository, reportRepository, memberService, imageConverter);
 
         member = new Member();
         member.setFirstName("Nagy");

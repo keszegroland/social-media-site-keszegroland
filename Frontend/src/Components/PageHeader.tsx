@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { PageHeaderProps } from "../Types/PostTypes";
-import { useAuth } from "../Utils/AuthProvider";
+import useAuth from "../Utils/UseAuth";
 
 function PageHeader({ headerName }: PageHeaderProps) {
   const { signOut } = useAuth();
