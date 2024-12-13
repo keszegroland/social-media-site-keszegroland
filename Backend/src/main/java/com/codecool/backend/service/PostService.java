@@ -9,11 +9,11 @@ import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Report;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.repository.ReportRepository;
+import com.codecool.backend.utils.ImageConverter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +22,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
     private final MemberService memberService;
+    private final ImageConverter imageConverter;
 
     @Autowired
-    public PostService(PostRepository postRepository, ReportRepository reportRepository, MemberService memberService) {
+    public PostService(PostRepository postRepository, ReportRepository reportRepository, MemberService memberService, ImageConverter imageConverter) {
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
         this.memberService = memberService;
+        this.imageConverter = imageConverter;
     }
 
     public List<PostDTO> getAllPosts() {
@@ -47,7 +49,7 @@ public class PostService {
             Member member = memberService.getMemberByUsername(username);
             post.setMember(member);
             post.setDescription(newPostDTO.description());
-            post.setPicture(convertBase64Image(newPostDTO));
+            post.setPicture(imageConverter.toBytes(newPostDTO));
             postRepository.save(post);
             return post.getPostPublicId();
         } catch (RuntimeException e) {
@@ -71,28 +73,12 @@ public class PostService {
         postRepository.save(post);
     }
 
-    private byte[] convertBase64Image(NewPostDTO newPostDTO) {
-        String pictureBase64Data = newPostDTO.picture();
-        if (pictureBase64Data != null && !pictureBase64Data.isEmpty()) {
-            return Base64.getDecoder().decode(pictureBase64Data);
-        }
-        return null;
-    }
-
-    private String convertImageToBase64(byte[] picture) {
-        String base64Image = null;
-        if (picture != null) {
-            base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(picture);
-        }
-        return base64Image;
-    }
-
     protected Post getPostByPublicId(UUID postPublicId) {
         return postRepository.findByPostPublicId(postPublicId);
     }
 
     protected PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), convertImageToBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), imageConverter.toBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
     }
 
     protected List<PostDTO> getAllReportedPosts() {

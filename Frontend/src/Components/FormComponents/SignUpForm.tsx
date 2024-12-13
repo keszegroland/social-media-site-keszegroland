@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import CustomInput from "./CustomInput";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { NewMember } from "../../Types";
+import { NewMember } from "../../Types/MemberTypes";
 
 async function createMember(newMember: NewMember): Promise<string> {
   const res = await fetch('/api/member/signup', {

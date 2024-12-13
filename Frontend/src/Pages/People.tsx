@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import getToken from "../Utils/getToken";
-import { JWTTokenType, MemberIdentity } from "../Types";
+import { JWTTokenType } from "../Types/PostTypes";
 import OneMember from "../Components/People/OneMember";
 import PageHeader from "../Components/PageHeader";
+import { MemberIdentity } from "../Types/MemberTypes";
+import useAuth from "../Utils/UseAuth";
 
 async function handleFetchAllMembers(token: JWTTokenType): Promise<MemberIdentity[]> {
   const response: Response = await fetch("/api/member/all", {
@@ -16,7 +17,7 @@ async function handleFetchAllMembers(token: JWTTokenType): Promise<MemberIdentit
 
 function People() {
   const [members, setMembers] = useState<MemberIdentity[]>([]);
-  const token = getToken();
+  const { token } = useAuth();
 
   useEffect(() => {
     async function getAllMembers() {

@@ -1,4 +1,4 @@
-import { ReactionButtonProps } from "../../../../Types";
+import { ReactionButtonProps } from "../../../../Types/PostTypes";
 
 function ReactionButton({ status, handleAction, activeImgPath, activeImgText, unActiveImgPath, unActiveImgText }: ReactionButtonProps) {
 

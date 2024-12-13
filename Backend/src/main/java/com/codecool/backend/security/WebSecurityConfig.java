@@ -63,9 +63,9 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/admin/deleteMember/**").hasRole("ADMIN")
                                 .requestMatchers("/api/post/**").hasRole("USER")
-                                .requestMatchers("/api/comment/**").hasRole("USER")
+                                .requestMatchers("/api/comments/**").hasRole("USER")
                                 .requestMatchers("/api/likes/**").hasRole("USER")
-                                .requestMatchers("/api/saves/**").hasRole("USER")
+                                .requestMatchers("/api/savedPosts/**").hasRole("USER")
                 );
 
         http.authenticationProvider(authenticationProvider());

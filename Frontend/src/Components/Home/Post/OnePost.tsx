@@ -1,4 +1,4 @@
-import { PostProps } from '../../../Types';
+import { PostProps } from '../../../Types/PostTypes';
 import BodyPost from './BodyPost';
 import FooterPost from './Footer/FooterPost';
 import HeaderPost from './HeaderPost';

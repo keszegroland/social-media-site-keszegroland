@@ -1,4 +1,4 @@
-import { PostProps } from "../../../Types";
+import { PostProps } from "../../../Types/PostTypes";
 
 function BodyPost({ post }: PostProps) {
 

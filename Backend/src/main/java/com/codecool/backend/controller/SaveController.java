@@ -1,6 +1,7 @@
 package com.codecool.backend.controller;
 
 import com.codecool.backend.controller.dto.PostDTO;
+import com.codecool.backend.controller.dto.SavedPostDTO;
 import com.codecool.backend.service.SaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/saves")
+@RequestMapping("/api/savedPosts")
 public class SaveController {
     private final SaveService saveService;
 
@@ -34,8 +35,13 @@ public class SaveController {
         return saveService.getSaveDataForPost(postPublicId, principal.getName());
     }
 
-    @GetMapping("/my-saves")
-    public Set<PostDTO> getMySaves(Principal principal) {
-        return saveService.getSavesForMember(principal.getName());
+    @GetMapping("/my-savedPosts")
+    public Set<SavedPostDTO> getMySavedPosts(Principal principal) {
+        return saveService.getSavedPostsForMember(principal.getName());
+    }
+
+    @GetMapping("/{postPublicId}")
+    public PostDTO getSavedPostByPublicId(@PathVariable UUID postPublicId) {
+        return saveService.getSavedPostByPublicId(postPublicId);
     }
 }

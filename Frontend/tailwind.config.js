@@ -13,6 +13,7 @@ export default {
   },
   plugins: [
     require('daisyui'),
+    require('tailwind-scrollbar'),
   ],
   daisyui: {
     themes: ['retro'],

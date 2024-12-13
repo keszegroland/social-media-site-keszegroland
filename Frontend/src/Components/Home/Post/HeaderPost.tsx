@@ -1,5 +1,5 @@
 import { formatDistanceToNowStrict } from "date-fns";
-import { PostProps } from "../../../Types";
+import { PostProps } from "../../../Types/PostTypes";
 import MemberImage from "../../People/MemberImage";
 
 function HeaderPost({ post }: PostProps) {
