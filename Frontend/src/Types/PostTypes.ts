@@ -35,11 +35,18 @@ export interface LikeTextProps {
   usernameOfTheFirstLiker: string;
 }
 
+export interface NewPost {
+  description: string;
+  picture: string;
+  tags: string;
+}
+
 export interface Post {
   postPublicId: string;
   username: string;
   description: string;
   picture: string;
+  tags: string;
   creationDate: Date;
   memberFirstName: string;
   memberLastName: string;
@@ -100,4 +107,8 @@ export interface DetailedSavedPostProps {
 
 export interface OpenSavedPostProps extends PostIdentifier {
   onClose: () => void;
+}
+
+export interface FileUploaderProps {
+  onUpload: (pictureObj: File) => void;
 }
