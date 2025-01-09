@@ -76,7 +76,7 @@ public class PostControllerIT {
     void testCreatePost() throws Exception {
 
 
-        NewPostDTO newPostDTO = new NewPostDTO("kutyi", "");
+        NewPostDTO newPostDTO = new NewPostDTO("kutyi", "", "");
 
         mockMvc.perform(post("/api/post/create")
                         .content(objectMapper.writeValueAsString(newPostDTO))

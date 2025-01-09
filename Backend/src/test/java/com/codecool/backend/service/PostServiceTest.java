@@ -108,7 +108,7 @@ public class PostServiceTest {
 
         when(memberRepository.findByUsername("nagy_mancs")).thenReturn(Optional.of(member));
 
-        NewPostDTO newPostDTO = new NewPostDTO("meow", "");
+        NewPostDTO newPostDTO = new NewPostDTO("meow", "", "");
 
         Post post2 = new Post();
         post2.setDescription(newPostDTO.description());
@@ -129,7 +129,7 @@ public class PostServiceTest {
 
     @Test
     void testCreateNewPostFail() {
-        NewPostDTO postDTO = new NewPostDTO("meow", "");
+        NewPostDTO postDTO = new NewPostDTO("meow", "", "");
         when(postRepository.save(any(Post.class))).thenThrow(RuntimeException.class);
         assertThrows(RuntimeException.class, () -> postService.createNewPost(postDTO, member.getUsername()));
     }

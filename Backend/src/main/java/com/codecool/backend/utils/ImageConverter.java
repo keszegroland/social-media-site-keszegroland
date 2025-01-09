@@ -1,6 +1,5 @@
 package com.codecool.backend.utils;
 
-import com.codecool.backend.controller.dto.NewPostDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -9,8 +8,7 @@ import java.util.Base64;
 public class ImageConverter {
     private final static String BASE64_PREFIX = "data:image/png;base64,";
 
-    public byte[] toBytes(NewPostDTO newPostDTO) {
-        String pictureBase64Data = newPostDTO.picture();
+    public byte[] toBytes(String pictureBase64Data) {
         if (pictureBase64Data != null && !pictureBase64Data.isEmpty()) {
             return Base64.getDecoder().decode(pictureBase64Data);
         }
