@@ -112,3 +112,12 @@ export interface OpenSavedPostProps extends PostIdentifier {
 export interface FileUploaderProps {
   onUpload: (pictureObj: File) => void;
 }
+
+export interface PictureCarouselProps {
+  pictureList: File[];
+}
+
+export interface NavigationControlsProps {
+  onPrevious: () => void;
+  onNext: () => void;
+}
