@@ -56,7 +56,6 @@ function NewPostForm() {
     });
   }
 
-
   return (
     <form className="h-full w-full flex flex-col p-4 lg:pb-8 mb-36 md:mb-0 min-w-80 gap-7" onSubmit={(handleCreateNewPost)}>
       <div className="w-full flex flex-col items-start gap-1">
@@ -69,7 +68,7 @@ function NewPostForm() {
         <input className="input input-bordered text-neutral text-left w-full border rounded-2xl bg-base-300" placeholder="art, coding, challenge" value={tags} onChange={(e) => setTags(e.target.value)}></input>
       </div>
       <div className="w-full gap-3 flex justify-end">
-        <button className="btn bg-base-300" type="button" onClick={() => navigate("/home")}>Cancel</button>
+        <button className="btn bg-base-300" type="reset" onClick={() => navigate("/home")}>Cancel</button>
         <button className="btn bg-neutral text-base-100" type="submit">Create</button>
       </div>
     </form>
