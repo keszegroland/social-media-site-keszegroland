@@ -6,6 +6,7 @@ import Home from "./Pages/Home";
 import SideNavbar from "./Components/Home/SideBar/SideNavbar";
 import People from "./Pages/People";
 import SavedPosts from "./Pages/SavedPosts";
+import CreatePost from "./Pages/CreatePost";
 
 export const router = createBrowserRouter(
   [
@@ -31,6 +32,10 @@ export const router = createBrowserRouter(
         {
           path: "/saved",
           element: <SavedPosts />
+        },
+        {
+          path: "/create",
+          element: <CreatePost />
         }
       ],
     },

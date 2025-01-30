@@ -14,7 +14,7 @@ function SideNavbar() {
         <CustomMenuItem fileName="home" text="Home" route="/home" />
         <CustomMenuItem fileName="people" text="People" route="/people" />
         <CustomMenuItem fileName="save" text="Saved" route="/saved" />
-        <CustomMenuItem fileName="createPost" text="Create Post" route="/post/create" />
+        <CustomMenuItem fileName="createPost" text="Create Post" route="/create" />
         <CustomMenuItem fileName="signOut" text="Sign Out" route="/signin" className="hidden md:block md:mt-auto" onSignOutClick={signOut} />
       </ul>
     </div>

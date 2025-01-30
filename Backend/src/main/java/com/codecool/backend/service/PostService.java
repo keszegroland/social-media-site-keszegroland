@@ -49,7 +49,8 @@ public class PostService {
             Member member = memberService.getMemberByUsername(username);
             post.setMember(member);
             post.setDescription(newPostDTO.description());
-            post.setPicture(imageConverter.toBytes(newPostDTO));
+            post.setPicture(imageConverter.toBytes(newPostDTO.picture()));
+            post.setTags(newPostDTO.tags());
             postRepository.save(post);
             return post.getPostPublicId();
         } catch (RuntimeException e) {
@@ -78,7 +79,7 @@ public class PostService {
     }
 
     protected PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), imageConverter.toBase64(post.getPicture()), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), imageConverter.toBase64(post.getPicture()), post.getTags(), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
     }
 
     protected List<PostDTO> getAllReportedPosts() {

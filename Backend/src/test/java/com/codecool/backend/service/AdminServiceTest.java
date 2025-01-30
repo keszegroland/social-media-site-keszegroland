@@ -63,7 +63,7 @@ public class AdminServiceTest {
 
     @Test
     void testGetAllReportedPosts() {
-        PostDTO postDTO = new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), "", post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        PostDTO postDTO = new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), "", "", post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
         when(postService.getAllReportedPosts()).thenReturn(List.of(postDTO));
         adminService.getAllReportedPosts();
         verify(postService).getAllReportedPosts();

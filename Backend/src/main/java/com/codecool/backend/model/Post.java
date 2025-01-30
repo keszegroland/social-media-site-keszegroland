@@ -32,6 +32,8 @@ public class Post {
     @Lob
     private byte[] picture;
 
+    private String tags;
+
     private LocalDateTime creationDate = LocalDateTime.now();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
