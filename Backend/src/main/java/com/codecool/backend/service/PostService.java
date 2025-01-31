@@ -5,11 +5,12 @@ import com.codecool.backend.controller.dto.PostDTO;
 import com.codecool.backend.controller.dto.ReportDTO;
 import com.codecool.backend.exception.MemberIsAlreadyReportedException;
 import com.codecool.backend.model.Member;
+import com.codecool.backend.model.Picture;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Report;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.repository.ReportRepository;
-import com.codecool.backend.utils.ImageConverter;
+import jakarta.persistence.Lob;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,17 @@ public class PostService {
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
     private final MemberService memberService;
-    private final ImageConverter imageConverter;
+    private final PictureService pictureService;
 
     @Autowired
-    public PostService(PostRepository postRepository, ReportRepository reportRepository, MemberService memberService, ImageConverter imageConverter) {
+    public PostService(PostRepository postRepository, ReportRepository reportRepository, MemberService memberService, PictureService pictureService) {
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
         this.memberService = memberService;
-        this.imageConverter = imageConverter;
+        this.pictureService = pictureService;
     }
 
+    @Transactional
     public List<PostDTO> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(this::convertPostToDTO).toList();
@@ -49,7 +51,7 @@ public class PostService {
             Member member = memberService.getMemberByUsername(username);
             post.setMember(member);
             post.setDescription(newPostDTO.description());
-            post.setPicture(imageConverter.toBytes(newPostDTO.picture()));
+            post.setPictures(newPostDTO.pictures().stream().map(newPictureDTO -> pictureService.createPicture(newPictureDTO, post)).toList());
             post.setTags(newPostDTO.tags());
             postRepository.save(post);
             return post.getPostPublicId();
@@ -78,8 +80,11 @@ public class PostService {
         return postRepository.findByPostPublicId(postPublicId);
     }
 
+    @Lob
     protected PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), imageConverter.toBase64(post.getPicture()), post.getTags(), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        List<Picture> pictures = post.getPictures();
+        return new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), pictures.stream().map(pictureService::convertPictureToDTO).toList(),
+                post.getTags(), post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
     }
 
     protected List<PostDTO> getAllReportedPosts() {

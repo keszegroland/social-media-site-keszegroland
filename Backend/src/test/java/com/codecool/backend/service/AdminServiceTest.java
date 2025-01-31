@@ -1,14 +1,12 @@
 package com.codecool.backend.service;
 
 import com.codecool.backend.controller.dto.MemberDTO;
+import com.codecool.backend.controller.dto.NewPictureDTO;
+import com.codecool.backend.controller.dto.PictureDTO;
 import com.codecool.backend.controller.dto.PostDTO;
-import com.codecool.backend.model.Member;
-import com.codecool.backend.model.MemberRole;
-import com.codecool.backend.model.Post;
-import com.codecool.backend.model.Role;
+import com.codecool.backend.model.*;
 import com.codecool.backend.repository.MemberRepository;
 import com.codecool.backend.repository.MemberRoleRepository;
-import com.codecool.backend.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -24,15 +22,16 @@ import static org.mockito.Mockito.when;
 
 public class AdminServiceTest {
     @Mock
-    private MemberService memberService;
+    private MemberService memberServiceMock;
     @Mock
-    private MemberRepository memberRepository;
+    private MemberRepository memberRepositoryMock;
     @Mock
-    private MemberRoleRepository memberRoleRepository;
+    private MemberRoleRepository memberRoleRepositoryMock;
     @Mock
-    private PostService postService;
+    private PostService postServiceMock;
+
     @Mock
-    private PostRepository postRepository;
+    private PictureService pictureServiceMock;
 
     private AdminService adminService;
 
@@ -43,30 +42,35 @@ public class AdminServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.adminService = new AdminService(memberService, memberRepository, memberRoleRepository, postService);
+        this.adminService = new AdminService(memberServiceMock, memberRepositoryMock, memberRoleRepositoryMock, postServiceMock);
+        when(pictureServiceMock.createPicture(any(NewPictureDTO.class), any(Post.class))).thenReturn(new Picture());
 
-        member = new Member();
-        member.setFirstName("Nagy");
-        member.setLastName("Lajos");
-        member.setUsername("nagyLajos");
-        member.setPassword("myPassword");
-        member.setEmail("nagyLajos@gmail.com");
-        member.setMemberPublicId(UUID.fromString("efc544d8-9ed6-4dfb-968b-1b939d202ee8"));
+        try {
+            member = new Member();
+            member.setFirstName("Nagy");
+            member.setLastName("Lajos");
+            member.setUsername("nagyLajos");
+            member.setPassword("myPassword");
+            member.setEmail("nagyLajos@gmail.com");
+            member.setMemberPublicId(UUID.fromString("efc544d8-9ed6-4dfb-968b-1b939d202ee8"));
 
-        post = new Post();
-        post.setPostPublicId(UUID.fromString("1a2b3c4d-9ed6-4dfb-968b-1b939d202ee8"));
-        post.setDescription("meow");
-        post.setPicture("".getBytes());
-        post.setMember(member);
-        post.setNumOfReport(2);
+            post = new Post();
+            post.setMember(member);
+            post.setPostPublicId(UUID.fromString("1a2b3c4d-9ed6-4dfb-968b-1b939d202ee8"));
+            post.setDescription("meow");
+            post.setPictures(List.of(pictureServiceMock.createPicture(new NewPictureDTO(""), post)));
+            post.setNumOfReport(2);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Test
     void testGetAllReportedPosts() {
-        PostDTO postDTO = new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), "", "", post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
-        when(postService.getAllReportedPosts()).thenReturn(List.of(postDTO));
+        PostDTO postDTO = new PostDTO(post.getPostPublicId(), post.getMember().getUsername(), post.getDescription(), List.of(new PictureDTO(UUID.randomUUID(), "")), "", post.getCreationDate(), post.getMember().getFirstName(), post.getMember().getLastName(), post.getMember().getImageColor());
+        when(postServiceMock.getAllReportedPosts()).thenReturn(List.of(postDTO));
         adminService.getAllReportedPosts();
-        verify(postService).getAllReportedPosts();
+        verify(postServiceMock).getAllReportedPosts();
     }
 
     @Test
@@ -75,16 +79,16 @@ public class AdminServiceTest {
         List<MemberDTO> expectedMembers = members.stream()
                 .map(member -> new MemberDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(), member.getUsername(), member.getEmail(), member.getRoles()))
                 .toList();
-        when(memberService.getAllMembers()).thenReturn(new HashSet<>(members));
+        when(memberServiceMock.getAllMembers()).thenReturn(new HashSet<>(members));
         List<MemberDTO> actualMembers = adminService.getAllMemberDTOs();
-        verify(memberService).getAllMembers();
+        verify(memberServiceMock).getAllMembers();
         assertEquals(expectedMembers, actualMembers);
     }
 
     @Test
     void testPromoteUserToAdmin_WhenUserDoesNotHaveAdminRole() {
-        when(memberService.getMemberByUsername("nagyLajos")).thenReturn(member);
-        when(memberRoleRepository.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.empty());
+        when(memberServiceMock.getMemberByUsername("nagyLajos")).thenReturn(member);
+        when(memberRoleRepositoryMock.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.empty());
         MemberRole role = new MemberRole();
         role.setRole(Role.ROLE_ADMIN);
         member.addRole(role);
@@ -92,7 +96,7 @@ public class AdminServiceTest {
                 member.getUsername(), member.getEmail(), member.getRoles());
         MemberDTO actual = adminService.promoteUserToAdmin("nagyLajos");
         assertEquals(expected, actual);
-        Mockito.verify(memberRoleRepository).save(any(MemberRole.class));
+        Mockito.verify(memberRoleRepositoryMock).save(any(MemberRole.class));
     }
 
     @Test
@@ -101,8 +105,8 @@ public class AdminServiceTest {
         role.setRole(Role.ROLE_ADMIN);
         member.addRole(role);
 
-        when(memberService.getMemberByUsername("nagyLajos")).thenReturn(member);
-        when(memberRoleRepository.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.of(role));
+        when(memberServiceMock.getMemberByUsername("nagyLajos")).thenReturn(member);
+        when(memberRoleRepositoryMock.findByRole(Role.ROLE_ADMIN)).thenReturn(Optional.of(role));
 
         MemberDTO expected = new MemberDTO(member.getMemberPublicId(), member.getFirstName(), member.getLastName(),
                 member.getUsername(), member.getEmail(), member.getRoles());
