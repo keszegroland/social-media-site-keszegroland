@@ -37,15 +37,20 @@ export interface LikeTextProps {
 
 export interface NewPost {
   description: string;
-  picture: string;
+  pictures: Picture[];
   tags: string;
+}
+
+export interface Picture {
+  picturePublicId?: string;
+  picture: string;
 }
 
 export interface Post {
   postPublicId: string;
   username: string;
   description: string;
-  picture: string;
+  pictures: Picture[];
   tags: string;
   creationDate: Date;
   memberFirstName: string;
@@ -110,14 +115,14 @@ export interface OpenSavedPostProps extends PostIdentifier {
 }
 
 export interface FileUploaderProps {
-  onUpload: (pictureObj: File) => void;
+  onUpload: (pictureObjList: File[]) => void;
 }
 
 export interface PictureCarouselProps {
   pictureList: File[];
 }
 
-export interface NavigationControlsProps {
+export interface CarouselControlProps {
   onPrevious: () => void;
   onNext: () => void;
 }

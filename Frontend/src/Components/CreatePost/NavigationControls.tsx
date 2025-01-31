@@ -1,6 +1,6 @@
-import { NavigationControlsProps } from "../../Types/PostTypes";
+import { CarouselControlProps } from "../../Types/PostTypes";
 
-function NavigationControls({ onPrevious, onNext }: NavigationControlsProps) {
+function NavigationControls({ onPrevious, onNext }: CarouselControlProps) {
 
   return (
     <div className="gap-3 w-full p-1">
