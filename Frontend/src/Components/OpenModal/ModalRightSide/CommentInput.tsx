@@ -1,8 +1,8 @@
 import data, { Skin } from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { FormEvent, useState } from "react";
-import { CommentProps, JWTTokenType } from '../../Types/PostTypes';
-import useAuth from '../../Utils/UseAuth';
+import { CommentProps, JWTTokenType } from '../../../Types/PostTypes';
+import useAuth from '../../../Utils/UseAuth';
 
 async function handleAddNewCommentToPost(token: JWTTokenType, postPublicId: string, comment: string): Promise<string> {
   const response: Response = await fetch(`/api/comments/create/${postPublicId}`, {

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { JWTTokenType, OpenSavedPostProps, Post } from "../../Types/PostTypes";
 import ModalHeader from "./ModalHeader";
-import ModalRightSide from "./ModalRightSide";
+import ModalRightSide from "./ModalRightSide/ModalRightSide";
 import { MemberData } from "../../Types/MemberTypes";
 import useAuth from "../../Utils/UseAuth";
+import Carousel from "../Home/Post/Body/Carousel";
 
 async function fetchSavedPostDetails(token: JWTTokenType, postPublicId: string): Promise<Post> {
   const response: Response = await fetch(`/api/savedPosts/${postPublicId}`, {
@@ -14,7 +15,7 @@ async function fetchSavedPostDetails(token: JWTTokenType, postPublicId: string):
   return await response.json();
 }
 
-function OpenSavedPost({ postPublicId, onClose }: OpenSavedPostProps) {
+function PostModal({ postPublicId, onClose }: OpenSavedPostProps) {
   const [savedPost, setSavedPost] = useState<Post | null>(null);
   const { token } = useAuth();
 
@@ -37,9 +38,7 @@ function OpenSavedPost({ postPublicId, onClose }: OpenSavedPostProps) {
     <div className="fixed justify-center items-center inset-0 bg-black bg-opacity-40 z-50">
       <div className="modal-box flex flex-col max-w-full w-4/5 p-0 overflow-hidden rounded-2xl md:w-3/5 md:h-full md:flex-row min-w-[300px]">
         <ModalHeader memberData={memberData} />
-        <div className="flex flex-[1_1_80%] md:h-full overflow-hidden">
-          <img className="w-full h-full object-cover" src={savedPost?.picture}></img>
-        </div>
+        <Carousel pictures={savedPost.pictures} divClassName="flex flex-[1_1_80%] md:h-full overflow-hidden" imgClassName="w-full h-full"></Carousel>
         <ModalRightSide memberData={memberData} postPublicId={savedPost.postPublicId} />
       </div>
       <div className="modal-action mt-0 absolute top-1 right-7" onClick={onClose}>
@@ -51,4 +50,4 @@ function OpenSavedPost({ postPublicId, onClose }: OpenSavedPostProps) {
   )
 }
 
-export default OpenSavedPost;
+export default PostModal;

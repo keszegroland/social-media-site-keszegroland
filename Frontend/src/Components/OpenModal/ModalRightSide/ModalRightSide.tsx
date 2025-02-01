@@ -1,8 +1,8 @@
-import MemberSignature from "./MemberSignature";
 import CommentSection from "./CommentSection";
 import { useState } from "react";
 import ModalFooter from "./ModalFooter";
-import { ModalRightSideProps } from "../../Types/MemberTypes";
+import { ModalRightSideProps } from "../../../Types/MemberTypes";
+import MemberSignature from "../MemberSignature";
 
 function ModalRightSide({ memberData, postPublicId }: ModalRightSideProps) {
   const [isNewCommentAdded, setIsNewCommentAdded] = useState<boolean>(false);

@@ -83,7 +83,7 @@ export interface PostIdentifier {
 }
 
 export interface SavedPost extends PostIdentifier {
-  picture: string;
+  pictures: Picture[];
 }
 
 export interface SavedPostProps {
@@ -125,4 +125,10 @@ export interface PictureCarouselProps {
 export interface CarouselControlProps {
   onPrevious: () => void;
   onNext: () => void;
+}
+
+export interface CarouselProps {
+  pictures: Picture[];
+  divClassName: string;
+  imgClassName: string;
 }

@@ -1,5 +1,5 @@
-import { CommentProps } from "../../Types/PostTypes";
-import FooterPost from "../Home/Post/Footer/FooterPost";
+import { CommentProps } from "../../../Types/PostTypes";
+import FooterPost from "../../Home/Post/Footer/FooterPost";
 import CommentInput from "./CommentInput";
 
 function ModalFooter({ postPublicId, onNewCommentCreation }: CommentProps) {
