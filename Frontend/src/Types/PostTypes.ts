@@ -130,5 +130,6 @@ export interface CarouselControlProps {
 export interface CarouselProps {
   pictures: Picture[];
   divClassName: string;
+  pClassName: string;
   imgClassName: string;
 }

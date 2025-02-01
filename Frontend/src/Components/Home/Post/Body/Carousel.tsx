@@ -2,7 +2,7 @@ import { useState } from "react";
 import CarouselNavigationButtons from "./CarouselNavigationButtons";
 import { CarouselProps } from "../../../../Types/PostTypes";
 
-function Carousel({ pictures, divClassName, imgClassName }: CarouselProps) {
+function Carousel({ pictures, divClassName, pClassName, imgClassName }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   function showPreviousPicture() {
@@ -14,14 +14,14 @@ function Carousel({ pictures, divClassName, imgClassName }: CarouselProps) {
   }
 
   return (
-    <div className={`carousel ${divClassName}`}>
+    <div className={`carousel relative ${divClassName}`}>
+      <p className={`absolute right-2 z-50 bg-black/60 text-white px-2 py-1 rounded-[16px] text-xs ${pClassName}`}>{pictures.length}/{currentIndex + 1}</p>
       {pictures.length > 0 && (
         <div className="flex flex-col relative">
           <img className={`object-cover ${imgClassName}`} src={pictures[currentIndex].picture} alt={pictures[currentIndex].picturePublicId}></img>
           {pictures.length > 1 && <CarouselNavigationButtons onPrevious={showPreviousPicture} onNext={showNextPicture}></CarouselNavigationButtons>}
         </div>
-      )
-      }
+      )}
     </div>
   )
 }
