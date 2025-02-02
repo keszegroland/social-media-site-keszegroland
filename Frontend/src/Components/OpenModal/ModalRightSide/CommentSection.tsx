@@ -20,7 +20,7 @@ function CommentSection({ postPublicId, isNewCommentAdded, onCommentsFetched }: 
     async function getCommentsForPost() {
       const data: Comment[] = await fetchCommentsForPost(token, postPublicId);
       setComments(data);
-      onCommentsFetched();
+      onCommentsFetched(false);
     }
     getCommentsForPost();
   }, [token, postPublicId, isNewCommentAdded, onCommentsFetched])

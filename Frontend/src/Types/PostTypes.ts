@@ -103,7 +103,11 @@ export interface CommentProps extends PostIdentifier {
 
 export interface CommentSectionProps extends PostIdentifier {
   isNewCommentAdded: boolean;
-  onCommentsFetched: () => void;
+  onCommentsFetched: (isNewCommentAdded: boolean) => void;
+}
+
+export interface CommentButtonProps {
+  postPublicId: string;
 }
 
 export interface DetailedSavedPostProps {

@@ -15,7 +15,7 @@ function Carousel({ pictures, divClassName, pClassName, imgClassName }: Carousel
 
   return (
     <div className={`carousel relative ${divClassName}`}>
-      <p className={`absolute right-2 z-50 bg-black/60 text-white px-2 py-1 rounded-[16px] text-xs ${pClassName}`}>{pictures.length}/{currentIndex + 1}</p>
+      <p className={`absolute right-2 z-20 bg-black/60 text-white px-2 py-1 rounded-[16px] text-xs ${pClassName}`}>{pictures.length}/{currentIndex + 1}</p>
       {pictures.length > 0 && (
         <div className="flex flex-col relative">
           <img className={`object-cover ${imgClassName}`} src={pictures[currentIndex].picture} alt={pictures[currentIndex].picturePublicId}></img>

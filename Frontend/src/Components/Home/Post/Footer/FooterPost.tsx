@@ -90,7 +90,7 @@ function FooterPost({ postPublicId }: FooterPostProps) {
       <div className="flex w-full justify-between">
         <div className="flex gap-2">
           <ReactionButton status={isLiked} handleAction={handleLikeAction} activeImgPath="/liked.svg" activeImgText="liked" unActiveImgPath="/like.svg" unActiveImgText="like" />
-          <CommentButton />
+          <CommentButton postPublicId={postPublicId} />
         </div>
         <ReactionButton status={isSaved} handleAction={handleSaveAction} activeImgPath="/saved.svg" activeImgText="saved" unActiveImgPath="/save.svg" unActiveImgText="save" />
       </div>

@@ -60,4 +60,6 @@ export interface MemberDataProps {
 }
 
 export interface ModalRightSideProps extends PostIdentifier, MemberDataProps {
+  isNewCommentAdded: boolean;
+  onNewCommentCreation: (isNewCommentAdded: boolean) => void;
 }
