@@ -6,7 +6,6 @@ import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.model.Save;
 import com.codecool.backend.repository.SaveRepository;
-import com.codecool.backend.utils.ImageConverter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +20,14 @@ public class SaveService {
     private final SaveRepository saveRepository;
     private final PostService postService;
     private final MemberService memberService;
-    private final ImageConverter imageConverter;
+    private final PictureService pictureService;
 
     @Autowired
-    public SaveService(SaveRepository saveRepository, PostService postService, MemberService memberService, ImageConverter imageConverter) {
+    public SaveService(SaveRepository saveRepository, PostService postService, MemberService memberService, PictureService pictureService) {
         this.saveRepository = saveRepository;
         this.postService = postService;
         this.memberService = memberService;
-        this.imageConverter = imageConverter;
+        this.pictureService = pictureService;
     }
 
     @Transactional
@@ -78,7 +77,7 @@ public class SaveService {
     }
 
     private SavedPostDTO convertSaveToSavePostDTO(Save save) {
-        return new SavedPostDTO(save.getPost().getPostPublicId(), imageConverter.toBase64(save.getPost().getPicture()));
+        return new SavedPostDTO(save.getPost().getPostPublicId(), save.getPost().getPictures().stream().map(pictureService::convertPictureToDTO).toList());
     }
 
 }

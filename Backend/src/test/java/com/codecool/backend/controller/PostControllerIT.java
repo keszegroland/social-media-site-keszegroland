@@ -1,12 +1,13 @@
 package com.codecool.backend.controller;
 
 import com.codecool.backend.controller.dto.NewPostDTO;
+import com.codecool.backend.controller.dto.NewPictureDTO;
 import com.codecool.backend.model.Member;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.repository.MemberRepository;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.security.jwt.JwtUtils;
-import com.codecool.backend.service.PostService;
+import com.codecool.backend.service.PictureService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,10 +42,10 @@ public class PostControllerIT {
     private PostRepository postRepository;
 
     @Autowired
-    private PostService postService;
+    private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private PictureService pictureService;
 
     @MockBean
     private JwtUtils jwtUtils;
@@ -66,7 +67,7 @@ public class PostControllerIT {
         post.setMember(member);
         post.setDescription("meow");
         post.setPostPublicId(UUID.fromString("84ba7cdd-abf9-4fde-8c3a-2ac9eac67006"));
-        post.setPicture("".getBytes());
+        post.setPictures(List.of(pictureService.createPicture(new NewPictureDTO(""), post)));
         post.setNumOfReport(0);
         postRepository.save(post);
     }
@@ -76,7 +77,7 @@ public class PostControllerIT {
     void testCreatePost() throws Exception {
 
 
-        NewPostDTO newPostDTO = new NewPostDTO("kutyi", "", "");
+        NewPostDTO newPostDTO = new NewPostDTO("kutyi", List.of(new NewPictureDTO("")), "");
 
         mockMvc.perform(post("/api/post/create")
                         .content(objectMapper.writeValueAsString(newPostDTO))

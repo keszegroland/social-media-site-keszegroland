@@ -1,13 +1,14 @@
 package com.codecool.backend.service;
 
 import com.codecool.backend.controller.dto.NewPostDTO;
+import com.codecool.backend.controller.dto.NewPictureDTO;
 import com.codecool.backend.controller.dto.PostDTO;
 import com.codecool.backend.model.Member;
+import com.codecool.backend.model.Picture;
 import com.codecool.backend.model.Post;
 import com.codecool.backend.repository.MemberRepository;
 import com.codecool.backend.repository.PostRepository;
 import com.codecool.backend.repository.ReportRepository;
-import com.codecool.backend.utils.ImageConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,16 +29,15 @@ import static org.mockito.Mockito.when;
 
 public class PostServiceTest {
     @Mock
-    private PostRepository postRepository;
+    private PostRepository postRepositoryMock;
     @Mock
-    private ReportRepository reportRepository;
+    private ReportRepository reportRepositoryMock;
     @Mock
-    private MemberService memberService;
+    private MemberService memberServiceMock;
     @Mock
-    private MemberRepository memberRepository;
-
+    private MemberRepository memberRepositoryMock;
     @Mock
-    private ImageConverter imageConverter;
+    private PictureService pictureServiceMock;
 
     private PostService postService;
 
@@ -49,40 +48,36 @@ public class PostServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        postService = new PostService(postRepository, reportRepository, memberService, imageConverter);
+        postService = new PostService(postRepositoryMock, reportRepositoryMock, memberServiceMock, pictureServiceMock);
+        when(pictureServiceMock.createPicture(any(NewPictureDTO.class), any(Post.class))).thenReturn(new Picture());
 
-        member = new Member();
-        member.setFirstName("Nagy");
-        member.setLastName("Lajos");
-        member.setUsername("nagy_mancs");
-        member.setPassword("Meow123");
-        member.setEmail("mancs@gmail.com");
-        memberRepository.save(member);
+        try {
+            member = new Member();
+            member.setFirstName("Nagy");
+            member.setLastName("Lajos");
+            member.setUsername("nagy_mancs");
+            member.setPassword("Meow123");
+            member.setEmail("mancs@gmail.com");
+            memberRepositoryMock.save(member);
 
-        post = new Post();
-        post.setDescription("meow");
-        post.setPicture("".getBytes());
-        post.setMember(member);
-        postRepository.save(post);
-
+            post = new Post();
+            post.setDescription("meow");
+            post.setPictures(List.of(pictureServiceMock.createPicture(new NewPictureDTO(""), post)));
+            post.setMember(member);
+            postRepositoryMock.save(post);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     private PostDTO convertPostToDTO(Post post) {
         return postService.convertPostToDTO(post);
     }
 
-    private byte[] convertBase64Image(NewPostDTO newPostDTO) {
-        String pictureBase64Data = newPostDTO.picture();
-        if (pictureBase64Data != null && !pictureBase64Data.isEmpty()) {
-            return Base64.getDecoder().decode(pictureBase64Data);
-        }
-        return null;
-    }
-
     @Test
     void testGetAllPosts() {
         List<Post> posts = List.of(post);
-        when(postRepository.findAll()).thenReturn(posts);
+        when(postRepositoryMock.findAll()).thenReturn(posts);
         List<PostDTO> expected = List.of(convertPostToDTO(post));
         List<PostDTO> actual = postService.getAllPosts();
         assertEquals(expected, actual);
@@ -91,7 +86,7 @@ public class PostServiceTest {
     @Test
     void testGetPostByMemberPublicId() {
         List<Post> posts = List.of(post);
-        when(postRepository.findAllByMemberMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"))).thenReturn(posts);
+        when(postRepositoryMock.findAllByMemberMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"))).thenReturn(posts);
         List<PostDTO> expected = List.of(convertPostToDTO(post));
         List<PostDTO> actual = postService.getPostsByMemberPublicId(UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b"));
         assertEquals(expected, actual);
@@ -106,17 +101,17 @@ public class PostServiceTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn("nagy_mancs");
 
-        when(memberRepository.findByUsername("nagy_mancs")).thenReturn(Optional.of(member));
+        when(memberRepositoryMock.findByUsername("nagy_mancs")).thenReturn(Optional.of(member));
 
-        NewPostDTO newPostDTO = new NewPostDTO("meow", "", "");
+        NewPostDTO newPostDTO = new NewPostDTO("meow", List.of(new NewPictureDTO("")), "");
 
         Post post2 = new Post();
         post2.setDescription(newPostDTO.description());
-        post2.setPicture(convertBase64Image(newPostDTO));
+        post2.setPictures(newPostDTO.pictures().stream().map(pictureDTO -> pictureServiceMock.createPicture(pictureDTO, post)).toList());
         post2.setMember(member);
         UUID generatedUUID = UUID.fromString("af584ddd-41b7-4fa3-b245-7a49f8c7316b");
 
-        when(postRepository.save(any(Post.class))).thenAnswer(invocation -> {
+        when(postRepositoryMock.save(any(Post.class))).thenAnswer(invocation -> {
             Post savedPost = invocation.getArgument(0);
             savedPost.setPostPublicId(generatedUUID);
             return savedPost;
@@ -129,8 +124,8 @@ public class PostServiceTest {
 
     @Test
     void testCreateNewPostFail() {
-        NewPostDTO postDTO = new NewPostDTO("meow", "", "");
-        when(postRepository.save(any(Post.class))).thenThrow(RuntimeException.class);
+        NewPostDTO postDTO = new NewPostDTO("meow", List.of(new NewPictureDTO("")), "");
+        when(postRepositoryMock.save(any(Post.class))).thenThrow(RuntimeException.class);
         assertThrows(RuntimeException.class, () -> postService.createNewPost(postDTO, member.getUsername()));
     }
 }

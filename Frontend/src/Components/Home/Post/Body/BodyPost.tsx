@@ -1,10 +1,11 @@
-import { PostProps } from "../../../Types/PostTypes";
+import { PostProps } from "../../../../Types/PostTypes";
+import Carousel from "./Carousel";
 
 function BodyPost({ post }: PostProps) {
 
   function formatTags() {
     if (!post.tags) {
-      return <p></p>;
+      return <></>;
     }
     return post.tags.split(", ").map(tag => <li key={tag}>#{tag.toLowerCase()}</li>);
   }
@@ -15,11 +16,7 @@ function BodyPost({ post }: PostProps) {
         <p className='font-semibold text-sm md:text-base'>{post.description}</p>
         <ul className="flex items-center gap-1 text-sm">{formatTags()}</ul>
       </div>
-      <img
-        className="w-[468px] h-[585px] object-cover sm:rounded-[16px]"
-        src={post.picture}
-        alt={post.description || "Post Picture"}
-      />
+      <Carousel pictures={post.pictures} divClassName="w-full sm:max-h-full 2xl:h-full" pClassName="top-2" imgClassName="w-[468px] h-[585px] sm:rounded-[16px]"></Carousel>
     </>
   )
 }

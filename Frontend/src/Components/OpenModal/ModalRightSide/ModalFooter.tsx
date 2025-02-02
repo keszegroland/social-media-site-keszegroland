@@ -1,5 +1,5 @@
-import { CommentProps } from "../../Types/PostTypes";
-import FooterPost from "../Home/Post/Footer/FooterPost";
+import { CommentProps } from "../../../Types/PostTypes";
+import FooterPost from "../../Home/Post/Footer/FooterPost";
 import CommentInput from "./CommentInput";
 
 function ModalFooter({ postPublicId, onNewCommentCreation }: CommentProps) {
@@ -9,7 +9,9 @@ function ModalFooter({ postPublicId, onNewCommentCreation }: CommentProps) {
       <div className="flex w-full py-2 px-4 border-t border-neutral items-start justify-start">
         <FooterPost postPublicId={postPublicId} />
       </div>
-      <CommentInput postPublicId={postPublicId} onNewCommentCreation={onNewCommentCreation}></CommentInput>
+      <div className="hidden md:relative md:flex md:border-t md:border-neutral md:w-full">
+        <CommentInput postPublicId={postPublicId} onNewCommentCreation={onNewCommentCreation}></CommentInput>
+      </div>
     </div>
   )
 }

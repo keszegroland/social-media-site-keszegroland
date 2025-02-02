@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import FileUploader from "./FileUploader";
-import { JWTTokenType, NewPost } from "../../Types/PostTypes";
+import { JWTTokenType, NewPost, Picture } from "../../Types/PostTypes";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import useAuth from "../../Utils/UseAuth";
 
@@ -19,21 +19,22 @@ async function createNewPost(post: NewPost, token: JWTTokenType): Promise<string
 
 function NewPostForm() {
   const [description, setDescription] = useState<string>("");
-  const [base64Picture, setBase64Picture] = useState<string>("");
+  const [base64PictureList, setBase64PictureList] = useState<Picture[]>([]);
   const [tags, setTags] = useState<string>("");
   const { token } = useAuth();
   const navigate: NavigateFunction = useNavigate();
 
   function handleCreateNewPost(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const post: NewPost = { description, picture: base64Picture, tags };
+    const post: NewPost = { description, pictures: base64PictureList, tags };
     createNewPost(post, token);
   }
 
-  async function handlePictureUpload(pictureObj: File) {
+  async function handlePictureUpload(pictureObjList: File[]) {
     try {
-      const base64String: string = await getBase64(pictureObj);
-      setBase64Picture(base64String.split(',')[1]);
+      const base64Strings = await Promise.all(pictureObjList.map(getBase64));
+      setBase64PictureList(
+        base64Strings.map(base64String => ({ picture: base64String.split(',')[1] })));
     } catch (error) {
       console.error("Error converting file to base64:", error);
     }

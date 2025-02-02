@@ -1,5 +1,5 @@
 import { PostProps } from '../../../Types/PostTypes';
-import BodyPost from './BodyPost';
+import BodyPost from './Body/BodyPost';
 import FooterPost from './Footer/FooterPost';
 import HeaderPost from './HeaderPost';
 

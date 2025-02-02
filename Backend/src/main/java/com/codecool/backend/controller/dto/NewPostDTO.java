@@ -1,4 +1,6 @@
 package com.codecool.backend.controller.dto;
 
-public record NewPostDTO(String description, String picture, String tags) {
+import java.util.List;
+
+public record NewPostDTO(String description, List<NewPictureDTO> pictures, String tags) {
 }

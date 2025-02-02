@@ -37,15 +37,20 @@ export interface LikeTextProps {
 
 export interface NewPost {
   description: string;
-  picture: string;
+  pictures: Picture[];
   tags: string;
+}
+
+export interface Picture {
+  picturePublicId?: string;
+  picture: string;
 }
 
 export interface Post {
   postPublicId: string;
   username: string;
   description: string;
-  picture: string;
+  pictures: Picture[];
   tags: string;
   creationDate: Date;
   memberFirstName: string;
@@ -78,7 +83,7 @@ export interface PostIdentifier {
 }
 
 export interface SavedPost extends PostIdentifier {
-  picture: string;
+  pictures: Picture[];
 }
 
 export interface SavedPostProps {
@@ -98,7 +103,11 @@ export interface CommentProps extends PostIdentifier {
 
 export interface CommentSectionProps extends PostIdentifier {
   isNewCommentAdded: boolean;
-  onCommentsFetched: () => void;
+  onCommentsFetched: (isNewCommentAdded: boolean) => void;
+}
+
+export interface CommentButtonProps {
+  postPublicId: string;
 }
 
 export interface DetailedSavedPostProps {
@@ -110,14 +119,21 @@ export interface OpenSavedPostProps extends PostIdentifier {
 }
 
 export interface FileUploaderProps {
-  onUpload: (pictureObj: File) => void;
+  onUpload: (pictureObjList: File[]) => void;
 }
 
 export interface PictureCarouselProps {
   pictureList: File[];
 }
 
-export interface NavigationControlsProps {
+export interface CarouselControlProps {
   onPrevious: () => void;
   onNext: () => void;
+}
+
+export interface CarouselProps {
+  pictures: Picture[];
+  divClassName: string;
+  pClassName: string;
+  imgClassName: string;
 }

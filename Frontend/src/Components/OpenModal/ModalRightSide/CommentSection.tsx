@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Comment, CommentSectionProps, JWTTokenType } from "../../Types/PostTypes";
-import MemberSignature from "./MemberSignature";
-import useAuth from "../../Utils/UseAuth";
+import { Comment, CommentSectionProps, JWTTokenType } from "../../../Types/PostTypes";
+import useAuth from "../../../Utils/UseAuth";
+import MemberSignature from "../MemberSignature";
 
 async function fetchCommentsForPost(token: JWTTokenType, postPublicId: string): Promise<Comment[]> {
   const response: Response = await fetch(`/api/comments/${postPublicId}/all`, {
@@ -20,7 +20,7 @@ function CommentSection({ postPublicId, isNewCommentAdded, onCommentsFetched }: 
     async function getCommentsForPost() {
       const data: Comment[] = await fetchCommentsForPost(token, postPublicId);
       setComments(data);
-      onCommentsFetched();
+      onCommentsFetched(false);
     }
     getCommentsForPost();
   }, [token, postPublicId, isNewCommentAdded, onCommentsFetched])

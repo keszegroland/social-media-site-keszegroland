@@ -9,7 +9,7 @@ function FileUploader({ onUpload }: FileUploaderProps) {
 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
-      onUpload(acceptedFiles[0]);
+      onUpload(acceptedFiles);
       setPictureList(acceptedFiles);
       setIsUploaded(true);
     }, [onUpload]);

@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -29,8 +30,8 @@ public class Post {
 
     private String description;
 
-    @Lob
-    private byte[] picture;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Picture> pictures = new ArrayList<>();
 
     private String tags;
 
